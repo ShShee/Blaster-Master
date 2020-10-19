@@ -1,0 +1,119 @@
+﻿  AniAddInfo.cpp
+  BoundingBox.cpp
+  base64.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\base64.cpp(85,39): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\base64.cpp(96,69): warning C4267: '=': conversion from 'size_t' to 'unsigned char', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\base64.cpp(113,65): warning C4267: '=': conversion from 'size_t' to 'unsigned char', possible loss of data
+  tinyxml2.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\tinyxml2.cpp(2146,82): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\tinyxml2.cpp(2146,82): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
+  TmxEllipse.cpp
+  TmxImage.cpp
+  TmxImageLayer.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxLayer.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(177,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(186,38): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(195,40): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(204,39): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(219,36): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxMap.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(177,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(186,38): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(195,40): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(204,39): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(219,36): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxObjectGroup.h(61,35): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.cpp(126,51): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.cpp(179,45): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.cpp(193,45): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  TmxObject.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPolygon.h(55,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPolyline.h(55,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxObjectGroup.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxObjectGroup.h(61,35): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxPolygon.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPolygon.h(55,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxPolyline.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPolyline.h(55,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxPropertySet.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.cpp(87,28): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  TmxTerrain.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxTerrainArray.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxTile.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTile.h(72,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTile.h(115,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  TmxTileLayer.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(177,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(186,38): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(195,40): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(204,39): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(219,36): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTileLayer.cpp(193,56): warning C4267: 'argument': conversion from 'size_t' to 'uLong', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTileLayer.cpp(201,35): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  TmxTileOffset.cpp
+  TmxTileset.cpp
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTile.h(72,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTile.h(115,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(177,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(186,38): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(195,40): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(204,39): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h(219,36): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+  Compiling...
+  TmxUtil.cpp
+  Camera.cpp
+  Enemies.cpp
+  Game.cpp
+F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(23,35): error C2065: 'GWL_HINSTANCE': undeclared identifier
+F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(118,52): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(118,21): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(132,68): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(132,36): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
+  GameObject.cpp
+  Jason.cpp
+  JasonOW.cpp
+  main.cpp
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(177,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(186,38): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(195,40): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(204,39): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(219,36): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxTile.h(72,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxTile.h(115,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxObjectGroup.h(61,35): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxPolygon.h(55,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxPolyline.h(55,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\Quadtree.h(28,18): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Quadtree.cpp
+F:\nmptgame\Blaster-Master\BlasterMaster\Quadtree.h(28,18): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Sophia.cpp
+  EnemyInitInfo.cpp
+  SpriteAddInfo.cpp
+  Sprites.cpp
+  Textures.cpp
+  WorldMap.cpp
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxPropertySet.h(60,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(177,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(186,38): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(195,40): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(204,39): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxMap.h(219,36): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxTile.h(72,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxTile.h(115,1): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxObjectGroup.h(61,35): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxPolygon.h(55,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+F:\nmptgame\Blaster-Master\BlasterMaster\MapReader\TmxPolyline.h(55,34): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
