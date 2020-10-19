@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="MapReader">
+      <UniqueIdentifier>{b7d30b5d-6d9b-488f-a682-ee881df60995}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemies.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JasonOW.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sophia.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyInitInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteAddInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AniAddInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Jason.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\base64.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\miniz.c">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\tinyxml2.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxEllipse.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxImage.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxImageLayer.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxLayer.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxObject.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxObjectGroup.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPolygon.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPolyline.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTerrain.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTerrainArray.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTile.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTileLayer.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTileOffset.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTileset.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxUtil.cpp">
+      <Filter>MapReader</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemies.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEventHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JasonOW.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sophia.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Jason.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\base64.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\tinyxml2.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxEllipse.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxImage.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxImageLayer.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxLayer.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMap.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxMapTile.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxObject.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxObjectGroup.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPoint.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPolygon.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPolyline.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxPropertySet.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTerrain.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTerrainArray.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTile.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTileLayer.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTileOffset.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxTileset.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\TmxUtil.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\zconf.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\zlib.h">
+      <Filter>MapReader</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+    <None Include="C:\Users\Admin\Downloads\7 - map\DirectXGame\DemoDirectX\MapReader\Tmx.h.in">
+      <Filter>MapReader</Filter>
+    </None>
+  </ItemGroup>
+</Project>
