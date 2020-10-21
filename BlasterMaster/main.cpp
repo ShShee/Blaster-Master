@@ -6,9 +6,7 @@
 #include "Textures.h"
 #include "Game.h"
 #include "Enemies.h"
-#include "JasonOW.h"
-#include "Sophia.h"
-#include "Jason.h"
+#include "ControllableChar.h"
 #include "WorldMap.h"
 #include "Quadtree.h"
 
@@ -26,13 +24,9 @@ CGame* game;
 vector<GameObject*>SaveForTheLast;
 Quadtree* quadtree = new Quadtree(1, new BoundingBox(0, 0, 2048, 2048));
 //Sophia* sophia = new Sophia(20.0f,20.0f);
-
-MovingObject* jasonOW = new JasonOW();
-
-MovingObject* jason = new Jason();
-
 //UnmovingObject* map = new UnmovingObject(0.0f,2048.0f);
 vector<GameObject*> ListObject;
+MainPlayer* ReadyPlayer1 = new MainPlayer();
 
 Enemy_Jumper* jumper = new Enemy_Jumper(1000.0f, 500.0f, 0.02f, 295.0f, true);
 
@@ -56,7 +50,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_X:
-		jason->SetAni(JUMP);
+		ReadyPlayer1->SetAni(JUMP);
 		break;
 	}
 }
@@ -69,14 +63,14 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 void CSampleKeyHander::KeyState(BYTE* states)
 {
 	if (game->IsKeyDown(DIK_RIGHT))
-		jasonOW->SetAni(GO_RIGHT);
+		ReadyPlayer1->SetAni(GO_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
-		jasonOW->SetAni(GO_LEFT);
+		ReadyPlayer1->SetAni(GO_LEFT);
 	else if (game->IsKeyDown(DIK_UP))
-		jasonOW->SetAni(GO_UP);
+		ReadyPlayer1->SetAni(GO_UP);
 	else if (game->IsKeyDown(DIK_DOWN))
-		jasonOW->SetAni(GO_DOWN);
-	else jasonOW->SetAni(IDLE);
+		ReadyPlayer1->SetAni(GO_DOWN);
+	else ReadyPlayer1->SetAni(IDLE);
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -101,13 +95,12 @@ void LoadResources()
 	CTextures* textures = CTextures::GetInstance();
 
 	textures->Add(ID_TEX_ENEMY, L"SpritesSource\\Enemies.png", D3DCOLOR_XRGB(255, 255, 255));
-	//textures->Add(ID_TEX_MAPTILE, L"SpritesSource\\level2-side_bank.png", D3DCOLOR_XRGB(176, 224, 248));
-	textures->Add(ID_TEX_JASONSOPHIA, L"SpritesSource\\JasonSophia.png", D3DCOLOR_XRGB(54, 115, 1));
+	ReadyPlayer1->LoadTexture();
 	wm->LoadMap("SpritesSource\\area2map.tmx");
 
 	CSprites* sprites = CSprites::GetInstance();
 
-	LPDIRECT3DTEXTURE9 texJasonSophia = textures->Get(ID_TEX_JASONSOPHIA);
+	
 	LPDIRECT3DTEXTURE9 texEnemy = textures->Get(ID_TEX_ENEMY);
 	//LPDIRECT3DTEXTURE9 texMap = textures->Get(ID_TEX_TILESET);
 
@@ -115,52 +108,9 @@ void LoadResources()
 	//Sophia
 
 	//core
-	sprites->Add(1, 4, 12, 10, 19, texJasonSophia);
-
-	//tire
-	sprites->Add(2, 3, 21, 11, 29, texJasonSophia);
-	sprites->Add(3, 12, 21, 20, 29, texJasonSophia);
-	sprites->Add(4, 21, 21, 29, 29, texJasonSophia);
-	sprites->Add(5, 30, 21, 38, 29, texJasonSophia);
-
-	//body
-	sprites->Add(6, 39, 3, 55, 11, texJasonSophia);
-	sprites->Add(7, 56, 3, 72, 11, texJasonSophia);
-	sprites->Add(8, 73, 4, 89, 19, texJasonSophia);
-	sprites->Add(9, 109, 3, 124, 19, texJasonSophia);
-	//sprites->Add(1, 90, 3, 98, 19, texJasonSophia);
-	//sprites->Add(2, 99, 3, 107, 19, texJasonSophia);
-
-	//sprites->Add(16, 125, 3, 141, 19, texJasonSophia);//switch to jason
-	//sprites->Add(17, 142, 3, 158, 19, texJasonSophia);
-
-	//turret
-	//sprites->Add(6, 3, 3, 11, 11, texJasonSophia);
-	sprites->Add(15, 12, 5, 19, 9, texJasonSophia);
-	sprites->Add(16, 21, 3, 29, 11, texJasonSophia);
-	sprites->Add(17, 32, 3, 36, 10, texJasonSophia);
 
 	//Jason
-	sprites->Add(101, 3, 30, 11, 46, texJasonSophia);
-	sprites->Add(102, 30, 31, 38, 46, texJasonSophia);
-	sprites->Add(103, 21, 30, 29, 46, texJasonSophia);
-	sprites->Add(104, 12, 31, 20, 46, texJasonSophia);
 
-	sprites->Add(105, 3, 47, 18, 54, texJasonSophia);
-	sprites->Add(106, 21, 47, 36, 54, texJasonSophia);
-
-	//JasonOW
-	sprites->Add(1001, 233, 69, 257, 101, texJasonSophia);
-	sprites->Add(1002, 258, 69, 282, 101, texJasonSophia);
-	sprites->Add(1003, 208, 69, 232, 101, texJasonSophia);
-
-	sprites->Add(1004, 233, 36, 257, 68, texJasonSophia);
-	sprites->Add(1005, 258, 36, 282, 68, texJasonSophia);
-	sprites->Add(1006, 208, 36, 232, 68, texJasonSophia);
-
-	sprites->Add(1007, 233, 3, 257, 35, texJasonSophia);
-	sprites->Add(1008, 258, 3, 282, 35, texJasonSophia);
-	sprites->Add(1009, 208, 3, 232, 35, texJasonSophia);
 
 	//orb
     sprites->Add(2061, 158, 387, 176, 405, texEnemy);
@@ -188,97 +138,8 @@ void LoadResources()
 	CAnimations* animations = CAnimations::GetInstance();
 	LPANIMATION ani;
 	//Sophia
-	ani = new CAnimation(100);
-	ani->Add(1);
-	animations->Add(1, ani);
-
-	ani = new CAnimation(300);
-	ani->Add(2);
-	ani->Add(3);
-	ani->Add(4);
-	ani->Add(5);
-	animations->Add(2, ani);
-
-	ani = new CAnimation(300);
-	ani->Add(3);
-	ani->Add(4);
-	ani->Add(5);
-	ani->Add(2);
-	animations->Add(3, ani);
-
-	ani = new CAnimation(300);
-	ani->Add(6);
-	ani->Add(7);
-	animations->Add(4, ani);
-
-	ani = new CAnimation(300);
-	ani->Add(8);
-	ani->Add(9);
-	animations->Add(5, ani);
-
-	ani = new CAnimation(100);
-	ani->Add(15);
-	animations->Add(6, ani);
-
-	ani = new CAnimation(300);
-	ani->Add(16);
-	ani->Add(17);
-	animations->Add(7, ani);
-
-	//sophia->Add_Image(1, 2, 3, 4, 6);
-	//sophia->Add_Image(0, 0, 0, 5, 7);
-
-	//Jason
-	ani = new CAnimation(300);
-	ani->Add(101);
-	animations->Add(50, ani);
-
-	ani = new CAnimation(300);
-	ani->Add(102);
-	ani->Add(103);
-	ani->Add(104);
-	animations->Add(51, ani);
-
-	ani = new CAnimation(300);
-	ani->Add(105);
-	ani->Add(106);
-	animations->Add(52, ani);
-
-	jason->Add_Image(50);
-	jason->Add_Image(50);
-	jason->Add_Image(51); 
-	jason->Add_Image(51);
-	jason->Add_Image(52);
-	jason->Add_Image(52);
-
-	jason->SetPos(700.0f, 100.0f);
-
-	//Jason-overworld
-	ani = new CAnimation(100);
-	ani->Add(1001);
-	ani->Add(1002);
-	ani->Add(1003);
-	animations->Add(100, ani);
-
-	ani = new CAnimation(100);
-	ani->Add(1004);
-	ani->Add(1005);
-	ani->Add(1006);
-	animations->Add(101, ani);
-
-	ani = new CAnimation(100);
-	ani->Add(1007);
-	ani->Add(1008);
-	ani->Add(1009);
-	animations->Add(102, ani);
-
-
-	jasonOW->Add_Image(100);
-	jasonOW->Add_Image(100);
-	jasonOW->Add_Image(101);
-	jasonOW->Add_Image(102);
-
-	jasonOW->SetPos(1000.0f, 500.0f);
+	ReadyPlayer1->SetPlayer(0);
+	ReadyPlayer1->SetPos(1000.0f, 500.0f);
 
 	ani = new CAnimation(200);
 	ani->Add(2061);
@@ -346,14 +207,14 @@ void LoadResources()
 */
 void Update(DWORD dt)
 {
-	jasonOW->Update(dt);
+	ReadyPlayer1->Update(dt);
 	//ListObject.clear();
 	//quadtree->Retrieve(ListObject, jason);
 	//sophia->Update(dt);
 	/*orb->Update(dt, jasonOW->Get_x(), jasonOW->Get_y());*/
 	//map->Update(dt);
 
-	CGame::GetInstance()->SetCamPos(jasonOW->Get_x() - SCREEN_WIDTH / 2, jasonOW->Get_y()+SCREEN_HEIGHT/2);
+	CGame::GetInstance()->SetCamPos(ReadyPlayer1->Get_CurPlayer_X() - SCREEN_WIDTH / 2, ReadyPlayer1->Get_CurPlayer_Y()+SCREEN_HEIGHT/2);
 
 	ListObject.clear();
 
@@ -363,7 +224,7 @@ void Update(DWORD dt)
 	for (GameObject* gobj : ListObject)
 	{
 		if (gobj->IsAbletoMove() == true)
-			gobj->Update(dt, jasonOW->Get_x(), jasonOW->Get_y());
+			gobj->Update(dt, ReadyPlayer1->Get_CurPlayer_X(), ReadyPlayer1->Get_CurPlayer_Y());
 	}
 }
 
@@ -397,7 +258,7 @@ void Render()
 				SaveForTheLast.push_back(gobj);
 			else gobj->Render();
 		}
-		jasonOW->Render();
+		ReadyPlayer1->Render();
 		for (GameObject* gobj : SaveForTheLast)
 		{
 			gobj->Render();

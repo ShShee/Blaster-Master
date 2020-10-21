@@ -1,23 +1,2 @@
-﻿  AniAddInfo.cpp
-  BoundingBox.cpp
-  Camera.cpp
-  Enemies.cpp
-  Game.cpp
-F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(118,52): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
-F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(118,21): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
-F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(132,68): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
-F:\nmptgame\Blaster-Master\BlasterMaster\Game.cpp(132,36): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
-  GameObject.cpp
-  Jason.cpp
-  JasonOW.cpp
-  main.cpp
-  Quadtree.cpp
-  Sophia.cpp
-  EnemyInitInfo.cpp
-  SpriteAddInfo.cpp
-  Sprites.cpp
-F:\nmptgame\Blaster-Master\BlasterMaster\Sprites.cpp(68,22): warning C4018: '>=': signed/unsigned mismatch
-  Textures.cpp
-  WorldMap.cpp
-  Generating Code...
+﻿  ControllableChar.cpp
   BlasterMaster.vcxproj -> F:\nmptgame\Blaster-Master\Debug\BlasterMaster.exe
