@@ -21,6 +21,8 @@ enum STATE
 	NOTHING,
 	LYING,
 	JUMPING,
+	LOOKUP,
+	TURNAR
 };
 
 using namespace std;

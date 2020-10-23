@@ -52,12 +52,19 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	case DIK_X:
 		ReadyPlayer1->SetAni(JUMP);
 		break;
+	case DIK_UP:
+		ReadyPlayer1->SetAni(GO_UP);
+		break;
 	}
 }
 
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
-	OutputDebugString(L"[INFO] KeyUp: %d\n");
+	switch (KeyCode)
+	{
+	case DIK_UP:
+		ReadyPlayer1->SetReleaseKey(GO_UP);
+	}
 }
 
 void CSampleKeyHander::KeyState(BYTE* states)
@@ -66,8 +73,8 @@ void CSampleKeyHander::KeyState(BYTE* states)
 		ReadyPlayer1->SetAni(GO_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		ReadyPlayer1->SetAni(GO_LEFT);
-	else if (game->IsKeyDown(DIK_UP))
-		ReadyPlayer1->SetAni(GO_UP);
+	//else if (game->IsKeyDown(DIK_UP))
+	//	ReadyPlayer1->SetAni(GO_UP);
 	else if (game->IsKeyDown(DIK_DOWN))
 		ReadyPlayer1->SetAni(GO_DOWN);
 	else ReadyPlayer1->SetAni(IDLE);
@@ -139,7 +146,7 @@ void LoadResources()
 	LPANIMATION ani;
 	//Sophia
 	ReadyPlayer1->SetPlayer(0);
-	ReadyPlayer1->SetPos(1000.0f, 500.0f);
+	ReadyPlayer1->SetPos(1000.0f, 100.0f);
 
 	ani = new CAnimation(200);
 	ani->Add(2061);

@@ -7,6 +7,7 @@ protected:
 	int lastAni = 0;
 	STATE* status;
 	vector<GameObject*>Bullet;
+	bool IsUpReleased = false;
 public:
 	ControllableChar() {
 		status = new STATE; *status = NOTHING;
@@ -14,6 +15,7 @@ public:
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
 	virtual void SetAni(int ani) = 0;
+	void SetReleaseKey(int Reaction) { if (Reaction == 2) IsUpReleased = true; }
 };
 
 
@@ -66,7 +68,7 @@ public:
 	void SetAni(int ani);
 	void SetPos(float x, float y) { Player[curPlayer]->SetPos(x, y); }
 	void SetPlayer(int cur) { if(cur>=0 && cur<3) this->curPlayer = cur; }
-
+	void SetReleaseKey(int Reaction) { Player[0]->SetReleaseKey(Reaction); }
 	float Get_CurPlayer_X() { return Player[curPlayer]->Get_x(); }
 	float Get_CurPlayer_Y() { return Player[curPlayer]->Get_y(); }
 	static MainPlayer* GetInstance();
