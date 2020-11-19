@@ -1,692 +1,402 @@
 #include "ControllableChar.h"
 
-MainPlayer* MainPlayer::_instance = NULL;
-
-MainPlayer::MainPlayer()
+void Weapon::Update(DWORD dt, vector<GameObject*>* coObject)
 {
-	ControllableChar* addplayer;
-
-	addplayer = new Sophia();
-	Player.push_back(addplayer);
-
-	addplayer = new Jason();
-	Player.push_back(addplayer);
-
-	addplayer = new JasonOW();
-	Player.push_back(addplayer);
-}
-
-void MainPlayer::LoadTexture()
-{
-	CTextures::GetInstance()->Add(ID_TEX_SOPHIA, L"SpritesSource\\Sophia.png", D3DCOLOR_XRGB(54, 115, 1));
-	CTextures::GetInstance()->Add(ID_TEX_JASON, L"SpritesSource\\Jason.png", D3DCOLOR_XRGB(54, 115, 1));
-
-	texSophia = CTextures::GetInstance()->Get(ID_TEX_SOPHIA);
-	texJason = CTextures::GetInstance()->Get(ID_TEX_JASON);
-
-	CSprites* sprites = CSprites::GetInstance();
-	CAnimations* animations = CAnimations::GetInstance();
-	LPANIMATION ani;
-
-	//Sophia
-
-	//to left
-	sprites->Add(10, 146, 5, 172, 23, texSophia);//1
-	sprites->Add(11, 178, 5, 204, 23, texSophia);//3
-	sprites->Add(12, 211, 5, 237, 23, texSophia);//5
-	sprites->Add(13, 242, 5, 268, 23, texSophia);//7
-
-	ani = new CAnimation(100);
-	for (int i = 10; i < 14; i++) ani->Add(i);
-	animations->Add(1, ani);
-
-	//to right
-	sprites->Add(21, 109, 5, 135, 23, texSophia);//7
-	sprites->Add(20, 77, 5, 103, 23, texSophia);//5
-	sprites->Add(19, 44, 5, 70, 23, texSophia);//3
-	sprites->Add(18, 13, 5, 39, 23, texSophia);//1
-
-	ani = new CAnimation(100);
-	for (int i = 18; i < 22; i++) ani->Add(i);
-	animations->Add(2, ani);
-
-	//turn to left
-	sprites->Add(26, 146, 80, 170, 98, texSophia);//10
-	sprites->Add(27, 179, 80, 203, 98, texSophia);//11
-	sprites->Add(28, 211, 80, 235, 98, texSophia);//12
-	sprites->Add(29, 244, 80, 268, 98, texSophia);//13
-
-	ani = new CAnimation(10);
-	ani->Add(26);
-	ani->Add(18);
-	animations->Add(3, ani);
-
-	ani = new CAnimation(10);
-	ani->Add(27);
-	ani->Add(19);
-	animations->Add(4, ani);
-
-	ani = new CAnimation(10);
-	ani->Add(28);
-	ani->Add(20);
-	animations->Add(5, ani);
-
-	ani = new CAnimation(10);
-	ani->Add(29);
-	ani->Add(21);
-	animations->Add(6, ani);
-	//turn to right
-	sprites->Add(33, 111, 80, 135, 98, texSophia);//16
-
-	sprites->Add(32, 77, 80, 101, 98, texSophia);//14
-
-	sprites->Add(31, 45, 80, 69, 98, texSophia);//12
-
-	sprites->Add(30, 12, 80, 36, 98, texSophia);//10
-
-	ani = new CAnimation(10);
-	ani->Add(30);
-	ani->Add(10);
-	animations->Add(7, ani);
-
-	ani = new CAnimation(10);
-	ani->Add(31);
-	ani->Add(11);
-	animations->Add(8, ani);
-
-	ani = new CAnimation(10);
-	ani->Add(32);
-	ani->Add(12);
-	animations->Add(9, ani);
-
-	ani = new CAnimation(10);
-	ani->Add(33);
-	ani->Add(13);
-	animations->Add(10, ani);
-
-	//jump left
-	sprites->Add(34, 146, 130, 172, 151, texSophia);//10
-
-	sprites->Add(35, 178, 130, 204, 151, texSophia);//12
-
-	sprites->Add(36, 211, 130, 237, 151, texSophia);//14
-
-	sprites->Add(37, 245, 130, 271, 151, texSophia);//16
-
-	for (int i = 34, j = 10, id = 11; i < 38; i++, j ++, id++)
+	for (int temp = 0; temp < BulletCount.size(); temp++)
 	{
-		ani = new CAnimation(50);
-		ani->Add(i);
-		//ani->Add(j);
-		animations->Add(id, ani);
+		if ((BulletCount[temp]->Get_y() < BulletCount[temp]->GetLimitation_Y()
+					&& BulletCount[temp]->GetType() ==5)
+				||(BulletCount[temp]->Get_x() > BulletCount[temp]->GetLimitation_X()
+					&& (BulletCount[temp]->GetType() % 3 == 0))
+				|| (BulletCount[temp]->Get_x() < BulletCount[temp]->GetLimitation_X()
+					&& (BulletCount[temp]->GetType() % 3 == 1))
+				|| (BulletCount[temp]->Get_y() > BulletCount[temp]->GetLimitation_Y()
+					&& BulletCount[temp]->GetType() == 2)
+				|| BulletCount[temp]->GetFlagCollision() == true)
+		{
+			BulletCount[temp]->SetSpeed(0, 0);
+			BulletCount[temp]->SetPos(BulletCount[temp]->Get_x(), BulletCount[temp]->Get_y());
+		}
 	}
-	
-	//jump right
-	sprites->Add(38, 10, 130, 36, 151, texSophia);//18
-
-	sprites->Add(39, 44, 130, 70, 151, texSophia);//20
-
-	sprites->Add(40, 77, 130, 103, 151, texSophia);//22
-
-	sprites->Add(41, 109, 130, 135, 151, texSophia);//24
-
-	for (int i = 38, j = 18, id = 15; i < 42; i++, j ++, id++)
+	if (BulletCount.size() > 0)
 	{
-		ani = new CAnimation(50);
-		ani->Add(i);
-		//ani->Add(j);
-		animations->Add(id, ani);
+
+		if (BulletCount[0]->GetFlagLimit() == false && BulletCount[0]->IsStopped() == true)
+		{
+			BulletCount[0]->SetAni(1);
+		}
+		if (BulletCount[0]->GetFlagLimit() == true)
+		{
+			BulletCount.erase(BulletCount.begin());
+		}
 	}
-
-	//look up left
-	sprites->Add(42, 146, 187, 171, 213, texSophia);
-	sprites->Add(43, 146, 218, 171, 246, texSophia);
-	sprites->Add(44, 146, 250, 171, 280, texSophia);
-	sprites->Add(45, 146, 283, 172, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 42; i < 46; i++) ani->Add(i);
-	animations->Add(19, ani);
-
-	sprites->Add(46, 176, 187, 201, 213, texSophia);
-	sprites->Add(47, 176, 218, 201, 246, texSophia);
-	sprites->Add(48, 176, 250, 199, 280, texSophia);
-	sprites->Add(49, 176, 283, 202, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 46; i < 50; i++) ani->Add(i);
-	animations->Add(20, ani);
-
-	sprites->Add(50, 209, 187, 234, 213, texSophia);
-	sprites->Add(51, 209, 218, 234, 246, texSophia);
-	sprites->Add(52, 209, 250, 232, 280, texSophia);
-	sprites->Add(53, 209, 283, 233, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 50; i < 54; i++) ani->Add(i);
-	animations->Add(21, ani);
-
-	sprites->Add(54, 243, 187, 268, 213, texSophia);
-	sprites->Add(55, 243, 218, 269, 246, texSophia);
-	sprites->Add(56, 243, 250, 267, 280, texSophia);
-	sprites->Add(57, 243, 283, 268, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 54; i < 58; i++) ani->Add(i);
-	animations->Add(22, ani);
-
-	//look up right
-	sprites->Add(58, 13, 187, 38, 213, texSophia);//18
-	sprites->Add(59, 12, 218, 37, 246, texSophia);
-	sprites->Add(60, 14, 250, 39, 280, texSophia);
-	sprites->Add(61, 13, 283, 39, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 58; i < 62; i++) ani->Add(i);
-	animations->Add(23, ani);
-
-	sprites->Add(62, 47, 187, 72, 213, texSophia);//20
-	sprites->Add(63, 47, 218, 72, 246, texSophia);
-	sprites->Add(64, 49, 250, 74, 280, texSophia);
-	sprites->Add(65, 48, 283, 74, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 62; i < 66; i++) ani->Add(i);
-	animations->Add(24, ani);
-
-	sprites->Add(66, 80, 187, 105, 213, texSophia);//22
-	sprites->Add(67, 80, 218, 105, 246, texSophia);
-	sprites->Add(68, 82, 250, 107, 280, texSophia);
-	sprites->Add(69, 79, 283, 105, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 66; i < 70; i++) ani->Add(i);
-	animations->Add(25, ani);
-
-	sprites->Add(70, 110, 187, 135, 213, texSophia);//24
-	sprites->Add(71, 110, 218, 135, 246, texSophia);
-	sprites->Add(72, 110, 250, 135, 280, texSophia);
-	sprites->Add(73, 109, 283, 135, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 70; i < 74; i++) ani->Add(i);
-	animations->Add(26, ani);
-
-	//look up back left
-	sprites->Add(77, 146, 187, 171, 213, texSophia);
-	sprites->Add(76, 146, 218, 171, 246, texSophia);
-	sprites->Add(75, 146, 250, 171, 280, texSophia);
-	sprites->Add(74, 146, 283, 172, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 74; i < 78; i++) ani->Add(i);
-	animations->Add(27, ani);
-
-	sprites->Add(81, 176, 187, 201, 213, texSophia);
-	sprites->Add(80, 176, 218, 201, 246, texSophia);
-	sprites->Add(79, 176, 250, 199, 280, texSophia);
-	sprites->Add(78, 176, 283, 202, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 78; i < 82; i++) ani->Add(i);
-	animations->Add(28, ani);
-
-	sprites->Add(85, 209, 187, 234, 213, texSophia);
-	sprites->Add(84, 209, 218, 234, 246, texSophia);
-	sprites->Add(83, 209, 250, 232, 280, texSophia);
-	sprites->Add(82, 209, 283, 233, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 82; i < 86; i++) ani->Add(i);
-	animations->Add(29, ani);
-
-	sprites->Add(89, 243, 187, 268, 213, texSophia);
-	sprites->Add(88, 243, 218, 269, 246, texSophia);
-	sprites->Add(87, 243, 250, 267, 280, texSophia);
-	sprites->Add(86, 243, 283, 268, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 86; i < 90; i++) ani->Add(i);
-	animations->Add(30, ani);
-
-	//look up right
-	sprites->Add(93, 13, 187, 38, 213, texSophia);//18
-	sprites->Add(92, 12, 218, 37, 246, texSophia);
-	sprites->Add(91, 14, 250, 39, 280, texSophia);
-	sprites->Add(90, 13, 283, 39, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 90; i < 94; i++) ani->Add(i);
-	animations->Add(31, ani);
-
-	sprites->Add(97, 47, 187, 72, 213, texSophia);//20
-	sprites->Add(96, 47, 218, 72, 246, texSophia);
-	sprites->Add(95, 49, 250, 74, 280, texSophia);
-	sprites->Add(94, 48, 283, 74, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 94; i < 98; i++) ani->Add(i);
-	animations->Add(32, ani);
-
-	sprites->Add(101, 80, 187, 105, 213, texSophia);//22
-	sprites->Add(100, 80, 218, 105, 246, texSophia);
-	sprites->Add(99, 82, 250, 107, 280, texSophia);
-	sprites->Add(98, 79, 283, 105, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 98; i < 102; i++) ani->Add(i);
-	animations->Add(33, ani);
-
-	sprites->Add(105, 110, 187, 135, 213, texSophia);//24
-	sprites->Add(104, 110, 218, 135, 246, texSophia);
-	sprites->Add(103, 110, 250, 135, 280, texSophia);
-	sprites->Add(102, 109, 283, 135, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 102; i < 106; i++) ani->Add(i);
-	animations->Add(34, ani);
-
-	//look up walk left
-	sprites->Add(106, 146, 283, 172, 317, texSophia);
-	sprites->Add(107, 176, 283, 202, 317, texSophia);
-	sprites->Add(108, 209, 283, 233, 317, texSophia);
-	sprites->Add(109, 243, 283, 268, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 106; i < 110; i++) ani->Add(i);
-	animations->Add(35, ani);
-
-	//look up walk right
-	sprites->Add(110, 13, 283, 39, 317, texSophia);
-	sprites->Add(111, 48, 283, 74, 317, texSophia);
-	sprites->Add(112, 79, 283, 105, 317, texSophia);
-	sprites->Add(113, 109, 283, 135, 317, texSophia);
-	ani = new CAnimation(30);
-	for (int i = 110; i < 114; i++) ani->Add(i);
-	animations->Add(36, ani);
-
-	for (int i = 1; i < 37; i++) Player[0]->Add_Image(i);
-
-	//Jason
-
-	//standing
-	sprites->Add(1001, 3, 30, 11, 46, texJason);
-	sprites->Add(1002, 30, 31, 38, 46, texJason);
-	sprites->Add(1003, 21, 30, 29, 46, texJason);
-	sprites->Add(1004, 12, 31, 20, 46, texJason);
-
-	//lying
-	sprites->Add(1005, 3, 47, 18, 54, texJason);
-	sprites->Add(1006, 21, 47, 36, 54, texJason);
-
-	//idle
-	ani = new CAnimation(300);
-	ani->Add(1001);
-	animations->Add(500, ani);
-
-	//walking
-	ani = new CAnimation(300);
-	ani->Add(1002);
-	ani->Add(1003);
-	ani->Add(1004);
-	animations->Add(501, ani);
-
-	//lying
-	ani = new CAnimation(300);
-	ani->Add(1005);
-	ani->Add(1006);
-	animations->Add(502, ani);
-
-	for (int i = 500; i < 503; i++)
+	for (int i = 0; i < BulletCount.size(); i++)
 	{
-		Player[1]->Add_Image(i);
-		Player[1]->Add_Image(i);
-	}
-
-	//JasonOW
-
-	//left - right
-	sprites->Add(10001, 233, 69, 257, 101, texJason);
-	sprites->Add(10002, 258, 69, 282, 101, texJason);
-	sprites->Add(10003, 208, 69, 232, 101, texJason);
-	
-	//up
-	sprites->Add(10004, 233, 36, 257, 68, texJason);
-	sprites->Add(10005, 258, 36, 282, 68, texJason);
-	sprites->Add(10006, 208, 36, 232, 68, texJason);
-
-	//down
-	sprites->Add(10007, 233, 3, 257, 35, texJason);
-	sprites->Add(10008, 258, 3, 282, 35, texJason);
-	sprites->Add(10009, 208, 3, 232, 35, texJason);
-
-	//left-right
-	ani = new CAnimation(100);
-	ani->Add(10001);
-	ani->Add(10002);
-	ani->Add(10003);
-	animations->Add(1000, ani);
-
-	//up
-	ani = new CAnimation(100);
-	ani->Add(10004);
-	ani->Add(10005);
-	ani->Add(10006);
-	animations->Add(1001, ani);
-
-	//down
-	ani = new CAnimation(100);
-	ani->Add(10007);
-	ani->Add(10008);
-	ani->Add(10009);
-	animations->Add(1002, ani);
-
-	Player[2]->Add_Image(1000);
-	Player[2]->Add_Image(1000);
-	Player[2]->Add_Image(1001);
-	Player[2]->Add_Image(1002);
-}
-
-void MainPlayer::Update(DWORD dt)
-{
-	Player[curPlayer]->Update(dt);
-}
-
-void MainPlayer::Render()
-{
-	Player[curPlayer]->Render();
-}
-
-void MainPlayer::SetAni(int ani)
-{
-	Player[curPlayer]->SetAni(ani);
-}
-
-MainPlayer* MainPlayer::GetInstance()
-{
-	if (_instance == NULL) _instance = new MainPlayer();
-	return _instance;
-}
-
-void Sophia::Update(DWORD dt)
-{
-	MovingObject::Update(dt);
-	vy -= 0.03f;
-	if (y < 100.0f)
-	{
-		vy = 0; y = 100.0f;
-		if (*status == JUMPING) *status = NOTHING;
+		BulletCount[i]->Update(dt, coObject);
 	}
 }
 
-void Sophia::Render()
+void Weapon::Render()
 {
-	if (currentAni >= 0 && designatedFrame == -1)
+	if (BulletCount.size() > 0)
 	{
-		animations[currentAni]->Render(x, y, -1, true);
-		if ((currentAni < 10 && currentAni>1) && animations[currentAni]->GetCurrentFrame() == 1)
+		for (int i = 1; i < BulletCount.size(); i++)
 		{
-			if (currentAni > 5 && currentAni < 10) currentAni = lastAni = 1;
-			else if (currentAni > 1 && currentAni < 6) currentAni = lastAni = 0;
-			lastFrame = 1;
-			/*animations[currentAni]->Render(x, y, lastFrame, true);*/
+			BulletCount[i]->Render();
 		}
-		else if ((currentAni > 17 && currentAni < 26) && animations[currentAni]->GetCurrentFrame() == 3)
-		{
-			//lastFrame = 3;
-			designatedFrame = 0;
-		}
+		BulletCount[0]->Render();
 	}
-		if ((currentAni < 3 && lastAni < 3) && designatedFrame != -1)
-		{
-			animations[lastAni]->Render(x, y, lastFrame, true);
-			/*if (*status == TURNAR) { if (lastAni == 0) lastAni = 1; else lastAni = 0; *status = NOTHING; }*/
-		}
-		if (IsUpReleased && (currentAni > 17 && currentAni < 26))
-		{
-			if (currentAni > 21 && currentAni<26) currentAni =lastAni= 1; else currentAni =lastAni= 0;
-			animations[currentAni]->Render(x, y, lastFrame, true);
-			*status = NOTHING;
-			//IsUpReleased = false;
-		}
-		else if ((currentAni > 17 && currentAni < 26) && designatedFrame!=-1)
-		{
-			animations[currentAni]->Render(x, y, 3, true);
-		}
-
 }
 
-void Sophia::SetAni(int ani)
+void Weapon::AddBulletId(int id)
 {
-	designatedFrame = 0;
-	lastFrame = animations[lastAni]->GetCurrentFrame();
-	switch (ani)
+	BulletID.push_back(id);
+}
+
+void Weapon::AddBullet(int WeaponType, int curBullet, float x, float y, float vx, float vy, bool FlipX, int type)
+{
+	float limitationX = 0, limitationY = 0;
+
+	if (WeaponType == 0)
 	{
-	case GO_RIGHT:	
-		if (*status == LOOKUP /*&& ani == lastAni*/)
-		{
-			ani = 34;
-			designatedFrame = -1;
-		}
-		if (ani != lastAni && *status == NOTHING) 
-		{
-			ani = lastFrame + 2;
-			designatedFrame = -1;
-		}
-		vx = 0.02f;
+		Bullet* addblt;
+		addblt = new Bullet(x, y, vx, vy, type);
+		addblt->Add_Image(BulletID[curBullet]);//ani 1
+		if (type >=3) addblt->Add_Image(BulletID[curBullet + 1]);
+		else addblt->Add_Image(BulletID[2]);//ani 2 with normal and 3 with special
+		addblt->SetFlip(FlipX);
+		BulletCount.push_back(addblt);
+	}
+	else if (WeaponType == 1)
+	{
+		Bullet* addblt;
+		addblt = new HomingMissile(x, y, vx, vy, type);
+		addblt->Add_Image(BulletID[curBullet]);//ani 1
 
-		break;
-	case GO_LEFT:
-		if (*status == LOOKUP && ani == lastAni)
-		{
-			ani = 35;
-			designatedFrame = 0;
-		}
-		if (ani != lastAni && *status == NOTHING)
-		{
-			ani = lastFrame + 6;
-			designatedFrame = -1;
-		}
-		vx = -0.02f;
+		if (type ==1 || type ==2)
+			(WeaponType == 1 && curBullet == 0) ? addblt->Add_Image(BulletID[1]) : addblt->Add_Image(BulletID[0]);//ani 2 with special
 
-		break;
-	case GO_UP:
-		if (*status !=JUMP/* && IsUpReleased*/)
-		{
-			IsUpReleased = false;
-			if (lastAni == 0) ani = lastFrame+18; else ani = lastFrame+22;
-			*status = LOOKUP;
-			designatedFrame = -1;
-		}
-		//if (*status == LOOKUP)
-		//{
-		//	ani = lastAni;
-		//	designatedFrame = 3;
-		//}
-		break;
-	case JUMP:
-		if (*status != JUMPING)
-		{
-			vx = 0; vy = +0.7f;
-			if (*status == NOTHING)
-			{
-				if (lastAni ==0) ani = lastFrame + 10; else ani = lastFrame + 14;
-				*status = JUMPING;
-			}
-			else if (*status == LOOKUP)
-			{
+		if (type >=3) addblt->Add_Image(BulletID[curBullet + 1]);
+		else addblt->Add_Image(BulletID[2]);//ani 2 with normal and 3 with special
+		addblt->SetFlip(FlipX);
+		BulletCount.push_back(addblt);
+	}
+}
 
-			}	
-			designatedFrame = -1;
-		}
-		else ani = -1;
-		break;
-	case IDLE:
+void Bullet::Update(DWORD dt, vector<GameObject*>* coObject)
+{
+	nx = 0; ny = 0;
+	GameObject::Update(dt);
+	GameObject::UpdateCollision(coObject);
+	if (nx != 0) {
 		vx = 0;
-		if (*status == JUMPING) {
-			if (lastAni == 0) ani = lastFrame + 10; else ani = lastFrame + 14;
-			designatedFrame = -1;
-		}
-		//if (IsUpReleased==true)
-		//{
-		//	*status = NOTHING;
-		//	/*if (lastAni > 21 && lastAni<26) ani = 0; else */ani = 1;
-		//	IsUpReleased = false;
-		//}
-		/*if(*status!=JUMPING) vy = 0;*/
-		//if (*status == JUMPING) designatedFrame = 2;
-		//if (lastAni == 2 && *status == NOTHING) ani = 0;
-		//else if (lastAni == 3 && *status == NOTHING) ani = 1;
-
-		break;
 	}
-	if (ani != lastAni && ani >= 0)
+	if (ny != 0) {
+		vy = 0;
+	}
+	for (UINT i = 0; i < coEventsResult.size(); i++)
 	{
-		if ((ani > 5 && ani < 10)||(ani>9 && ani<14)/*||(ani>17 && ani<22)*/) {
-			lastAni = 0;
-		}
-		else if ((ani > 1 && ani < 6) || (ani > 13 && ani < 18)/*||(ani>21 && ani<26)*/)
+		LPCOLLISIONEVENT e = coEventsResult[i];
+
+		if (dynamic_cast<Enemy*>(e->obj)) // if e->obj is Enemies
 		{
-			lastAni = 1;
+			Enemy* enemy = dynamic_cast<Enemy*>(e->obj);
+
+			if ((e->nx != 0 || e->ny != 0) && currentAni == 0)
+			{
+				e->obj->HP_down();
+				FlagCollision = true;
+				Sound::getInstance()->play("hit", false, 1);
+				if (e->obj->GetHP() > 0) e->obj->StartUntouchable();
+			}
 		}
-		if(ani<1 || ani>17) this->lastAni = ani;
-		//this->currentFrame = animations[ani]->GetCurrentFrame();
 	}
-	if (ani < 0) ani = lastAni;
-	MovingObject::SetAni(ani);
 }
 
-void Jason::Update(DWORD dt)
+void Bullet::Render()
 {
-	MovingObject::Update(dt);
-	vy -= 0.03f;
-	if (y <= 100)
+	int center = 1;
+	//RenderBoundingBox();
+	if (currentAni == 1) center = 2;
+	animations[currentAni]->Render(x, y, -1, center, FlipX);
+	if (animations[currentAni]->GetCurrentFrame() == 3)
 	{
-		vy = 0; y = 100.0f;
+		FlagLimit = true;
+	}
+}
+
+void Bullet::SetFlip(bool FlipFlag)
+{
+	FlipX = FlipFlag;
+}
+
+void Bullet::SetLimitationByType(int type)
+{
+	if (type == 3) { limitationX = x + 100.0f; limitationY = y + 0.0f; }
+	else if (type == 4 || type==7) { limitationX = x - 100.0f; limitationY = y + 0.0f; }
+	else if (type == 0) { limitationX = x + 150.0f; limitationY = y + 0.0f; }
+	else if (type == 1) { limitationX = x - 150.0f; limitationY = y + 0.0f; }
+	else if (type == 2) { limitationX = x + 0.0f; limitationY = y + 150.0f; }
+	else if (type == 5) { limitationX = x + 0.0f; limitationY = y - 150.0f; }
+}
+
+void HomingMissile::Update(DWORD dt, vector<GameObject*>* coObject)
+{
+	nx = 0; ny = 0;
+	vector<GameObject*> OnlyMap;
+	for (UINT i = 0; i < coObject->size()-1; i++)
+	{
+		if (coObject->at(i)->IsAbletoMove() == false)
+			OnlyMap.push_back(coObject->at(i));
+	}
+	if (type >= 5)
+	{
+		OnlyMap.push_back(coObject->at(coObject->size()-1));
+	}
+	//else if (type != 5)
+	//{
+	//	for (UINT i = 0; i < coObject->size()-2; i++)
+	//	{
+	//		int a = abs(coObject->at(i)->Get_x() - this->x);
+	//		int b = abs(coObject->at(i + 1)->Get_x() - this->x);
+	//		if (a < b)
+	//		{
+	//			IdTarget = coObject->at(i)->GetId();
+	//			x_target = coObject->at(i)->Get_x();
+	//			y_target = coObject->at(i)->Get_y();
+	//		}
+	//	}
+	//	for (UINT i = 0; i < coObject->size() - 2; i++)
+	//	{
+	//		if(coObject->at(i))
+	//	}
+	//}
+	GameObject::Update(dt);
+	//if (x >= x_target - 8.0f || x <= x_target + 8.0f) vx = 0;
+	//if (y >= y_target - 8.0f || y <= y_target + 8.0f) vy = 0;
+	GameObject::UpdateCollision(&OnlyMap);
+	if ((nx != 0 || ny != 0) && type==5)
+	{
+		vx = 0; vy = 0; 
+	 FlagCollision = true;
+	}
+	for (UINT i = 0; i < coEventsResult.size(); i++)
+	{
+		LPCOLLISIONEVENT e = coEventsResult[i];
+
+		if ((dynamic_cast<Enemy*>(e->obj) && type<5) || (dynamic_cast<ControllableChar*>(e->obj))) // if e->obj is Enemies
+		{
+			if ((e->nx != 0 || e->ny != 0) && currentAni == 0)
+			{
+				if(e->obj->GetHP()>0)e->obj->HP_down();
+				Sound::getInstance()->play("sophiahit", false, 1);
+				FlagCollision = true;
+				if (e->obj->GetHP() > 0) e->obj->StartUntouchable();
+			}
+		}
+	}
+}
+
+//void HomingMissile::Render()
+//{
+//}
+
+void Enemy_Bomber::Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target)
+{
+	Enemy::Update(dt, coOBject);
+	wp.Update(dt, coOBject);
+	if (x > x_end || x < x_start || nx!=0) vx = -vx;
+	if (((x<x_target && x + 60>x_target) || (x > x_target && x - 80 < x_target)) && FlagFire==false && y-60.0f<y_target)
+	{
+		wp.AddBullet(1, 0, x + 5.0f, y - 10.0f, -0.04f, -0.08f, false, 7);
+		vy = +0.03f;
+		FlagFire = true;
+	}
+
+	if (ny!=0)
+	{
+		vy = 0.0f; vx = 0.0f;
+	}
+
+	if (vx < 0) currentAni = 1; else currentAni = 0;
+	if (vy != 0) designatedFrame = 1; else designatedFrame = 0;
+}
+
+void Enemy_Floater::Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target)
+{
+	Enemy::Update(dt, coOBject);
+	wp.Update(dt, coOBject);
+	if (nx != 0) vx = -vx;
+	if (ny != 0) vy = -vy;
+	if ((vx > 0 && x >= x_end) || (x < x_start && vx < 0)) vx = -vx;
+	if ((vy < 0 && y <= y_end) || (y > y_start && vy > 0)) vy = -vy;
+	CoolDown -= vtCD * dt;
+	if (x_start-30.0f < x_target && x_target < x_end && CoolDown <= 0)
+	{
+		float distance,tempvx,tempvy;
+		x > x_target ? distance = x / x_target : distance = x_target / x;
+		tempvx = (distance-1)/10;	
+		x > x_target ? tempvx = -tempvx : tempvx = tempvx;
+		tempvy= vx>0?-vx-0.08f:vx-0.08f;
+		wp.AddBullet(1, 0, x+5.0f, y-10.0f, tempvx,tempvy, false, 5);
+		wp.SetTarget(x_target, y_target);
+		CoolDown = 2000;
+	}
+	if (vx < 0 && animations.size()>1)	currentAni = 1; else currentAni = 0;
+	if (CoolDown >= 1600 && CoolDown<2000) designatedFrame = -1; else designatedFrame = 0;
+	//if (nx != 0) vx = -vx;
+}
+
+void Enemy_Cannon::Update(DWORD dt, vector<GameObject*>* coOBject)
+{
+
+}
+
+ControllableChar::ControllableChar()
+{
+	status = new STATE; *status = NOTHING;
+
+	Weapon* adddweapon;
+	for (int i = 0; i < 4; i++)
+	{
+		adddweapon = new Weapon();
+		WeaponType.push_back(adddweapon);
+	}
+	HealthPoint = 8;
+}
+
+void ControllableChar::Update(DWORD dt, vector<GameObject*> *coObject)
+{
+	nx = 0, ny = 0;
+	vector<GameObject*> ForCollision;
+	vector<GameObject*> ForChangeScene;
+
+	ForCollision.clear();
+	ForChangeScene.clear();
+
+	for (UINT i = 0; i < coObject->size(); i++)
+	{
+		if (coObject->at(i)->GetLayer()!= SCENE_DOOR)
+			ForCollision.push_back(coObject->at(i));
+		else ForChangeScene.push_back(coObject->at(i));
+	}
+	GameObject::Update(dt,&ForCollision);
+	GameObject::UpdateCollision(&ForCollision);
+	timerCD -= vtCD * dt;
+	timerCS += vtCS * dt;
+
+	if (nx != 0)
+	{
+		vx = 0;
+	}
+	if (ny != 0)
+	{
+		vy = 0;
+		IsFalling = false;
 		if (*status == JUMPING) *status = NOTHING;
 	}
-	//if (vx > 0 && x > 290) x = 290;
-	//else 
-	//if (vx < 0 && y < 0) y = 0;
-	//if (vy > 0 && y > 290) y = 290;
-	//else if (vy < 0 && y < 0) y = 0;
-}
 
-void Jason::Render()
-{
-	bool flipX = false;
-	if (currentAni % 2 == 0 || lastAni % 2 == 0) flipX = true;
-	if (currentAni >= 0 && designatedFrame == -1)
+	//invincible time
+	if (GetTickCount() - untouchable_start > 1000)
 	{
-		//if (*state != GO_LEFT) flipX = false;
-		animations[currentAni]->Render(x, y, -1, true, flipX);
+		untouchable_start = 0;
+		untouchable = 0;
+	}
+
+	//Collision logic with enemies
+	for (UINT i = 0; i < coEventsResult.size(); i++)
+	{
+		LPCOLLISIONEVENT e = coEventsResult[i];
+
+		if (dynamic_cast<Enemy*>(e->obj)) // if e->obj is Enemies
+		{
+			if ((e->nx != 0 || e->ny != 0) && untouchable==0)
+			{
+					if (HealthPoint > 0) HealthPoint--;
+					if (HealthPoint == 0) y += 23.0f;
+					StartUntouchable();
+					Sound::getInstance()->play("sophiahit", false, 1);
+			}
+		}
+
+		if (dynamic_cast<Item*>(e->obj)) // if e->obj is Items
+		{
+			if ((e->nx != 0 || e->ny != 0) && e->obj->GetHP() > 0)
+			{
+				if (HealthPoint < 8) 
+				{ 
+					HealthPoint++; 
+				}
+				e->obj->HP_down();
+				Sound::getInstance()->play("itemtaken", false, 1);
+				e->obj->SetDropItemState(PICKED);
+			}
+		}
+	}
+	if (untouchable != 0) RenderColor = 0; else RenderColor = 255;
+
+	if (x > 2048) x = 0;
+	else if (x < 0) x = 2032;
+	if (y < 0) y = 2048;
+	else if (y > 2048) y = 0;
+
+	if(FlagAutomatic==false)
+	for (int i = 0; i < ForChangeScene.size(); i++)
+	{
+		if (ForChangeScene[i]->GetBoundingBox()->IsContainWorld(this->GetBoundingBox()))
+		{
+			FlagAutomatic = true;
+			vtCS = 0.5f;
+		}
 	}
 	else
 	{
-		//if (lastAni==1) flipX = false;
-		/*if (lastAni == 0 && *laststate == GO_LEFT) flipX = true;*/
-		animations[lastAni]->Render(x, y, designatedFrame, true, flipX);
-	}
-}
-
-void Jason::SetAni(int ani)
-{
-	designatedFrame = 0;
-	switch (ani)
-	{
-	case GO_RIGHT:
-		if (*status == LYING) ani = 4; else ani = 2;
-		vx = 0.3f;
-		designatedFrame = -1;
-		break;
-	case GO_LEFT:
-		if (*status == LYING) ani = 5; else ani = 3;
-		vx = -0.3f;
-		designatedFrame = -1;
-		break;
-	case GO_UP:
-		if (*status == LYING)
+		if (timerCS > timeCSlimit)
 		{
-			*status = NOTHING;
-			if (lastAni == 4) ani = 0; else ani = 1;
+			FlagAutomatic = false;
+			timerCS = 0;
+			vtCS = 0;
 		}
-		else ani = -1;
-		break;
-	case GO_DOWN:
-		if (*status == NOTHING)
-		{
-			*status = LYING;
-			if (lastAni == 0) ani = 4; else ani = 5;
-		}
-		else ani = -1;
-		break;
-	case JUMP:
-		if (*status == NOTHING)
-		{
-			*status = JUMPING;
-			vx = 0; vy = +0.2f;
-			designatedFrame = 2;
-			if (lastAni % 2 == 0) ani = 2; else ani = 3;
-		}
-		else ani = -1;
-		break;
-	case IDLE:
-		vx = 0;
-		/*if(*status!=JUMPING) vy = 0;*/
-		if (*status == JUMPING) designatedFrame = 2;
-		if (lastAni == 2 && *status == NOTHING) ani = 0;
-		else if (lastAni == 3 && *status == NOTHING) ani = 1;
-		break;
-	}
-	if (ani != lastAni && ani >= 0)
-		//{
-		//	animations[ani]->SetCurrentFrame(currentFrame+1);
-		//}
-		//else
-	{
-		this->lastAni = ani;
-		//this->currentFrame = animations[ani]->GetCurrentFrame();
-	}
-	if (ani < 0) ani = lastAni;
-	MovingObject::SetAni(ani);
-}
-
-void JasonOW::Update(DWORD dt)
-{
-	MovingObject::Update(dt);
-	if (vx > 0 && x > 2084) x = 2084;
-	else if (vx < 0 && x < 0) x = 0;
-	if (vy > 0 && y > 2084) y = 2084;
-	else if (vy < 0 && y < 0) y = 0;
-}
-
-void JasonOW::Render()
-{
-	bool flipX = false;
-	if (currentAni == 0 || lastAni == 0) flipX = true;
-	if (currentAni >= 0)
-	{
-		//if (*state != GO_LEFT) flipX = false;
-		animations[currentAni]->Render(x, y, -1, true, flipX);
-	}
-	else {
-		//if (lastAni==1) flipX = false;
-		/*if (lastAni == 0 && *laststate == GO_LEFT) flipX = true;*/
-		animations[lastAni]->Render(x, y, /*currentFrame*/0, true, flipX);
 	}
 }
 
-void JasonOW::SetAni(int ani)
+void ControllableChar::UpdateWeapon(DWORD dt,vector<GameObject*> *coObject)
 {
-	MovingObject::SetAni(ani);
-	switch (ani)
-	{
-	case GO_RIGHT:
-		vx = 0.3f; vy = 0;
-		break;
-	case GO_LEFT:
-		vx = -0.3f; vy = 0;
-		break;
-	case GO_UP:
-		vy = +0.3f; vx = 0;
-		break;
-	case GO_DOWN:
-		vx = 0.0f; vy = -0.3f;
-		break;
-	case IDLE:
-		vx = 0; vy = 0;
-		break;
-	}
-	if (ani != lastAni && ani >= 0)
-		//{
-		//	animations[ani]->SetCurrentFrame(currentFrame+1);
-		//}
-		//else
-	{
-		this->lastAni = ani;
-		//this->currentFrame = animations[ani]->GetCurrentFrame();
-	}
+	WeaponType[curWeapon]->Update(dt,coObject);
+}
+
+void ControllableChar::RenderWeapon()
+{
+	//if (curWeapon == 0)
+	//{
+		WeaponType[curWeapon]->Render();
+	//}
+}
+
+void ControllableChar::ResetLife()
+{
+		currentAni = lastAni = 0;
+		HealthPoint = 8;
+}
+
+void ControllableChar::Add_BulletImage(int id,int weapontype)
+{
+	WeaponType[weapontype]->AddBulletId(id);
+}
+
+
+
+bool ControllableChar::LockCam(float x, float y)
+{
+	if ((x > 512 && x < 1024 && y>1776)
+		|| (x > 1024 && x < 2048 && y < 1008 && y>752)
+		|| (x > 1024 && x < 1536 && y < 1776 && y>1520))
+		return true;
+	return false;
+}
+
+void Enemy_With_Weapon::CreateSprite()
+{
+		wp.AddBulletId(750);
+		wp.AddBulletId(751);
 }

@@ -2,11 +2,13 @@
 #include <unordered_map>
 #include <d3dx9.h>
 
+#define ID_TEX_TEST 100
 #define ID_TEX_SOPHIA 0
 #define ID_TEX_JASON 1
+#define ID_TEX_ITEM 5
 #define ID_TEX_ENEMY 10
-#define ID_TEX_MAPTILE 20
-#define ID_TEX_TILESET 30
+#define ID_TEX_TILESET 20
+#define ID_TEX_HEALTHBAR 30
 
 using namespace std;
 

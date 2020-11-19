@@ -1,5 +1,5 @@
 #pragma once
-#include "Game.h"
+
 class BoundingBox
 {
 public:
@@ -10,6 +10,6 @@ public:
 
 	BoundingBox(float x=0, float y=0, int width=0, int height=0);
 	bool IsContain(BoundingBox *bx);
-
+	bool IsContainWorld(BoundingBox* bx);
 };
 

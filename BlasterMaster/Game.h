@@ -5,6 +5,7 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include "Camera.h"
+#include "BoundingBox.h"
 #include "KeyEventHandler.h"
 
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -33,16 +34,27 @@ class CGame
 public:
 	void InitKeyBoard(LPKEYEVENTHANDLER handler);
 	void Init(HWND hWnd);
-	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom,bool DrawCenter,bool FlipHorizontal);
+	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom,int DrawCenterType,bool FlipHorizontal,int RenderColor);
+	void DrawHealthbars(LPDIRECT3DTEXTURE9 texture,int Value);
 	int IsKeyDown(int KeyCode);
 	void ProcessKeyboard();
 
-	LPDIRECT3DTEXTURE9 LoadTexture(LPCWSTR texturePath);
+	static void SweptAABB(
+		BoundingBox* MoveObject,
+		float dx,			// 
+		float dy,			// 
+		BoundingBox* StaticObject,
+		float &t,
+		float &nx,
+		float &ny);
 
+	LPDIRECT3DTEXTURE9 LoadTexture(LPCWSTR texturePath);
 
 	LPDIRECT3DDEVICE9 GetDirect3DDevice() { return this->d3ddv; }
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
 	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
+
+	HWND getHWND() { return this->hWnd; }
 
 	D3DXVECTOR2 FromWorldToRender(float x,float y);
 	void SetCamPos(float x, float y);

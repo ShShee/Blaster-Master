@@ -15,3 +15,11 @@ bool BoundingBox::IsContain(BoundingBox* bx)
 		bx->x > this->width + this->x ||
 		bx->y > this->height+ this->y);
 }
+
+bool BoundingBox::IsContainWorld(BoundingBox* bx)
+{
+	return !(bx->x + bx->width < this->x ||
+		bx->y - bx->height > this->y ||
+		bx->x > this->width + this->x ||
+		bx->y < this->y-this->height);
+}

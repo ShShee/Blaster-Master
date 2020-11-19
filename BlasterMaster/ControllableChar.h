@@ -1,78 +1,165 @@
 #pragma once
-#include "GameObject.h"
 #include "Textures.h"
+#include "Enemies.h"
+
+class Bullet :public MovingObject
+{
+protected:
+	bool FlipX = true;
+	float limitationX;
+	float limitationY;
+	int type;
+	bool FlagCollision = false;
+	bool FlagLimit = false;
+	float x_target;
+	float y_target;
+public:
+	Bullet(float x, float y, float vx, float vy, int type)
+		:MovingObject(x, y, vx, vy) {
+		this->type = type;
+		SetLimitationByType(this->type);
+	}
+	virtual void Update(DWORD dt, vector<GameObject*>* coObject);
+	void Render();
+
+	void SetLimit(float x, float y) { limitationX = x; limitationY = y; }
+	void SetFlip(bool FlipFlag);
+	void SetFlagLimit(bool fl) { FlagLimit = fl; }
+	void SetLimitationByType(int type);
+
+	bool GetFlagLimit() { return FlagLimit; }
+	bool GetFlagCollision() { return FlagCollision; }
+	int GetType() { return type; }
+	float GetLimitation_X() { return limitationX; }
+	float GetLimitation_Y() { return limitationY; }
+	bool IsStopped() { if (vx == 0 && vy == 0) return true; else return false; }
+	void LocateTarget(float x, float y) { this->x_target = x; this->y_target = y; }
+};
+
+class HomingMissile : public Bullet
+{
+protected:
+	int IdTarget = 1000;
+public:
+	HomingMissile(float x, float y, float vx, float vy, int type) :Bullet(x, y, vx, vy, type) {}
+	void Update(DWORD dt, vector<GameObject*>* coObject);
+	void LockIdTarget(int id) { this->IdTarget = id; }
+	//void Render();
+};
+class Weapon
+{
+private:
+	vector<Bullet*> BulletCount;
+	vector<int> BulletID;
+public:
+	Weapon() {}
+	void Update(DWORD dt, vector <GameObject*>* coObject);
+	void Render();
+
+	void AddBulletId(int id);
+	void AddBullet(int WeaponType, int curBullet, float x, float y, float vx, float vy, bool FlipX = false, int type = 0);
+	bool IsAbletoMove() { return true; }
+	bool IsBulletNull() { return !(BulletCount.size() > 0); }
+	void SetTarget(float x, float y) { BulletCount[BulletCount.size() - 1]->LocateTarget(x, y); }
+};
+
+class Enemy_With_Weapon
+{
+protected:
+	Weapon wp;
+	float CoolDown = 0;
+	float vtCD = 0.5f;
+public:
+	void CreateSprite();
+	void Render() { wp.Render(); }
+};
+
+class Enemy_Bomber : public CAWA_Enemy,public Enemy_With_Weapon
+{
+private:
+	bool FlagFire = false;
+public:
+	Enemy_Bomber(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
+		:CAWA_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
+		wp.AddBulletId(Bomber_Bullet);
+		wp.AddBulletId(751);
+	}
+	void Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target);
+	void Render() { if (HealthPoint > 0) { Enemy::Render(); Enemy_With_Weapon::Render(); } }
+};
+
+class Enemy_Floater : public CAWA_Enemy, public Enemy_With_Weapon
+{
+public:
+	Enemy_Floater(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
+		:CAWA_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
+		CreateSprite();
+	}
+	void Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target);
+	void Render() { if (HealthPoint > 0) { Enemy::Render(); Enemy_With_Weapon::Render(); } }
+};
+
+class Enemy_Cannon : public CAWA_Enemy,public Enemy_With_Weapon
+{
+public:
+	Enemy_Cannon(float x = 0, float y = 0, bool DrawCenter = false)
+		:CAWA_Enemy(x, y, 0, 0, 0, 0, DrawCenter) {
+		CreateSprite();
+	}
+	void Update(DWORD dt, vector<GameObject*>* coOBject);
+	void Render() { if (HealthPoint > 0) { Enemy::Render(); Enemy_With_Weapon::Render(); } }
+};
+
+class Enemy_EyeBall : public Enemy_Floater
+{
+public:
+	Enemy_EyeBall(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
+		:Enemy_Floater(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
+	}
+};
+
 class ControllableChar :public MovingObject
 {
 protected:
 	int lastAni = 0;
+
 	STATE* status;
-	vector<GameObject*>Bullet;
+	vector<Weapon*>WeaponType;
+	int BulletFired = 0;
+	int curWeapon=0; //current weapon level
+	
 	bool IsUpReleased = false;
+	bool IsFalling = false;
+	bool IsJasonBack = true;
+	bool IsBlocked = false;
+	bool FlagAutomatic = false; //use when go through door
+
+	float timerCD = 0; //timer cooldown bullet
+	float vtCD; //start cooldown bullet
+
+	float timerCS = 0;
+	float timeCSlimit;
+	float vtCS = 0;
 public:
-	ControllableChar() {
-		status = new STATE; *status = NOTHING;
-	}
-	virtual void Update(DWORD dt) = 0;
+	ControllableChar();
+	virtual void Update(DWORD dt, vector<GameObject*> *coObject = NULL);
+	void UpdateWeapon(DWORD dt,vector<GameObject*> *coObject=NULL);
 	virtual void Render() = 0;
+	void RenderWeapon();
 	virtual void SetAni(int ani) = 0;
+	virtual void ResetLife();
+	void Add_BulletImage(int id,int weapontype);
+	bool LockCam(float x, float y);
+
+	void SetSpeacialWeapon(int spw) { this->curWeapon = spw; }
+	void SetNormalUpdate() { x += dx; y += dy; }
 	void SetReleaseKey(int Reaction) { if (Reaction == 2) IsUpReleased = true; }
+	bool IsFallingDown() { return IsFalling; }
+
+	bool GetJasonState() { return IsJasonBack; }
+	int GetCurWeapon() { return this->curWeapon; }
 };
 
-
-class Sophia : public ControllableChar
-{
-protected:
-	int lastFrame = 0;
-public:
-	Sophia() :ControllableChar() {}
-	void Update(DWORD dt);
-	void Render();
-	void SetAni(int ani);
-};
-
-
-class Jason : public ControllableChar
-{
-public:
-	Jason() :ControllableChar() {}
-	void Update(DWORD dt);
-	void Render();
-	void SetAni(int ani);
-};
-
-
-class JasonOW : public ControllableChar
-{
-private:
-	static JasonOW* _instance;
-public:
-	JasonOW() :ControllableChar() {};
-	void Update(DWORD dt);
-	void Render();
-	void SetAni(int ani);
-};
-
-class MainPlayer
-{
-private:
-	vector<ControllableChar*> Player;
-	LPDIRECT3DTEXTURE9 texSophia;
-	LPDIRECT3DTEXTURE9 texJason;
-	int curPlayer = 0;
-	static MainPlayer* _instance;
-public:
-	MainPlayer();
-	void LoadTexture();
-	void Update(DWORD dt);
-	void Render();
-	void SetAni(int ani);
-	void SetPos(float x, float y) { Player[curPlayer]->SetPos(x, y); }
-	void SetPlayer(int cur) { if(cur>=0 && cur<3) this->curPlayer = cur; }
-	void SetReleaseKey(int Reaction) { Player[0]->SetReleaseKey(Reaction); }
-	float Get_CurPlayer_X() { return Player[curPlayer]->Get_x(); }
-	float Get_CurPlayer_Y() { return Player[curPlayer]->Get_y(); }
-	static MainPlayer* GetInstance();
-};
 
 
 

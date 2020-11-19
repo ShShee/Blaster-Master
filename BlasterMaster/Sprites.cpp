@@ -19,10 +19,10 @@ CSprites* CSprites::GetInstance()
 	return __instance;
 }
 
-void CSprite::Draw(float x, float y,bool DrawCenter,bool flipX)
+void CSprite::Draw(float x, float y,int DrawCenterType,bool flipX,int RenderColor)
 {
 	CGame* game = CGame::GetInstance();
-	game->Draw(x, y, texture, left, top, right, bottom,DrawCenter,flipX);
+	game->Draw(x, y, texture, left, top, right, bottom,DrawCenterType,flipX,RenderColor);
 }
 
 void CSprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
@@ -48,7 +48,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y,int designatedFrame,bool DrawCenter,bool flipX)
+void CAnimation::Render(float x, float y,int designatedFrame,int DrawCenterType,bool flipX,int RenderColor)
 {
 	if (designatedFrame == -1)
 	{
@@ -70,11 +70,11 @@ void CAnimation::Render(float x, float y,int designatedFrame,bool DrawCenter,boo
 
 		}
 
-		frames[currentFrame]->GetSprite()->Draw(x, y,DrawCenter,flipX);
+		frames[currentFrame]->GetSprite()->Draw(x, y,DrawCenterType,flipX,RenderColor);
 	}
 	else
 	{
-		frames[designatedFrame]->GetSprite()->Draw(x, y, DrawCenter, flipX);
+		frames[designatedFrame]->GetSprite()->Draw(x, y, DrawCenterType, flipX,RenderColor);
 		currentFrame = designatedFrame;
 	}
 }

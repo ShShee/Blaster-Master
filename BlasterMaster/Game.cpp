@@ -112,13 +112,8 @@ void CGame::Init(HWND hWnd)
 /*
 	Utility function to wrap LPD3DXSPRITE::Draw
 */
-void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom,bool DrawCenter,bool FlipHorizontal)
+void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom,int DrawCenterType,bool FlipHorizontal,int RenderColor)
 {
-	D3DXVECTOR2 translate = FromWorldToRender(x, y);
-	D3DXVECTOR3 p(floor(translate.x-cam.get_x()),floor(translate.y-cam.get_y()), 0);
-	D3DXMATRIX oldMatrix,transform;
-	spriteHandler->GetTransform(&oldMatrix);
-	D3DXVECTOR2 ScalingCenter,Scale,RotationCenter,Translation;
 	RECT r;
 	r.left = left;
 	r.top = top;
@@ -127,6 +122,16 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 	float Half_Width = (float)((r.right - r.left) / 2);
 	float Half_Height = (float)((r.bottom - r.top) / 2);
 	D3DXVECTOR3 center(Half_Width, Half_Height, 0);
+	D3DXVECTOR2 translate = FromWorldToRender(x, y);
+	if (DrawCenterType == 1)
+	{
+		translate.x += Half_Width;
+		translate.y += Half_Height;
+	}
+	D3DXVECTOR3 p(floor(translate.x-cam.get_x()),floor(translate.y-cam.get_y()), 0);
+	D3DXMATRIX oldMatrix,transform;
+	spriteHandler->GetTransform(&oldMatrix);
+	D3DXVECTOR2 ScalingCenter,Scale,RotationCenter,Translation;
 	if (FlipHorizontal == true)
 	{
 		ScalingCenter = D3DXVECTOR2(floor(translate.x-cam.get_x()), floor(translate.y - cam.get_y()));
@@ -136,15 +141,26 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 		D3DXMatrixTransformation2D(&transform, &ScalingCenter, 0, &Scale, &RotationCenter, 0, &Translation);
 		spriteHandler->SetTransform(&transform);
 	}
-	if (DrawCenter == false) 
-	{
-		spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_XRGB(255,255,255));
-	}
-	else
-	{
-		spriteHandler->Draw(texture, &r, &center, &p, D3DCOLOR_XRGB(255,255,255));
-	}
+	DrawCenterType == 0 ? spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_XRGB(255, RenderColor, RenderColor)) : spriteHandler->Draw(texture, &r, &center, &p, D3DCOLOR_XRGB(255, RenderColor, RenderColor));
 	spriteHandler->SetTransform(&oldMatrix);
+}
+
+void CGame::DrawHealthbars(LPDIRECT3DTEXTURE9 texture,int Value)
+{
+	int HealthHeight= 0, HHeight = 0;
+	Draw(cam.get_x() + 13.0f, 2032.0f - cam.get_y() - 50.0f, texture, 55, 1, 69, 34, false, false, 255);
+	Draw(cam.get_x() + 13.0f, 2032.0f - cam.get_y() - 205.5f, texture, 55, 35, 69, 68, false, false, 255);
+	Draw(cam.get_x() + 12.0f, 2032.0f - cam.get_y() - 125.0f, texture, 17, 0, 33, 80, false, false, 255);
+	for (int i = 8; i > 0; i--)
+	{
+		if (Value == i)
+		{
+			HealthHeight = 2032.0f - cam.get_y() - (205.0f - i * 10.0f);
+			HHeight = i * 10;
+		}
+	}
+	if(HHeight!=0) Draw(cam.get_x() + 12.0f, HealthHeight, texture, 34, 0, 50, HHeight, false, false, 255);
+	Draw(cam.get_x() + 12.0f, 2032.0f- cam.get_y() - 125.0f, texture, 0, 0, 16, 80, false, false, 255);
 }
 
 int CGame::IsKeyDown(int KeyCode)
@@ -262,6 +278,110 @@ void CGame::SetCamPos(float x, float y)
 	cam.SetCamPos(translate.x, translate.y);
 }
 
+/*
+	SweptAABB
+*/
+
+void CGame::SweptAABB(
+	BoundingBox* MoveObject,
+	float dx, float dy,
+	BoundingBox* StaticObject,
+	float &t, float &nx, float &ny)
+{
+
+	float dx_entry, dx_exit, tx_entry, tx_exit;
+	float dy_entry, dy_exit, ty_entry, ty_exit;
+
+	float t_entry;
+	float t_exit;
+
+	t = -1.0f;			// no collision
+	nx = ny = 0;
+
+	//
+	// Broad-phase test 
+	//
+
+	float bl = dx > 0 ? MoveObject->x : MoveObject->x + dx;
+	float bt = dy < 0 ? MoveObject->y : MoveObject->y + dy;
+	float br = dx > 0 ? MoveObject->x + MoveObject->width + dx  : MoveObject->x + MoveObject->width;
+	float bb = dy < 0 ? (MoveObject->y - MoveObject->height) + dy : MoveObject->y - MoveObject->height;
+
+	if (br < StaticObject->x || bl > StaticObject->x+StaticObject->width 
+	|| bb > StaticObject->y || bt < StaticObject->y - StaticObject->height) return;
+
+
+	if (dx == 0 && dy == 0) return;		// moving object is not moving > obvious no collision
+
+	if (dx > 0)
+	{
+		dx_entry = StaticObject->x - (MoveObject->x+MoveObject->width);
+		dx_exit = (StaticObject->x + StaticObject->width) - MoveObject->x;
+	}
+	else if (dx < 0)
+	{
+		dx_entry = (StaticObject->x + StaticObject->width) - MoveObject->x;
+		dx_exit = StaticObject->x - (MoveObject->x + MoveObject->width);
+	}
+
+
+	if (dy > 0)
+	{
+		dy_entry = (StaticObject->y - StaticObject->height) - MoveObject->y;
+		dy_exit = StaticObject->y - (MoveObject->y - MoveObject->height);
+	}
+	else if (dy < 0)
+	{
+		dy_entry = StaticObject->y - (MoveObject->y - MoveObject->height);
+		dy_exit = (StaticObject->y - StaticObject->height) - MoveObject->y;
+	}
+
+	if (dx == 0)
+	{
+		tx_entry = -99999999999;
+		tx_exit = 99999999999;
+	}
+	else
+	{
+		tx_entry = dx_entry / dx;
+		tx_exit = dx_exit / dx;
+	}
+
+	if (dy == 0)
+	{
+		ty_entry = -99999999999;
+		ty_exit = 99999999999;
+	}
+	else
+	{
+		ty_entry = dy_entry / dy;
+		ty_exit = dy_exit / dy;
+	}
+
+
+	if ((tx_entry < 0.0f && ty_entry < 0.0f) || tx_entry > 1.0f || ty_entry > 1.0f)
+	{
+		return;
+	}
+	t_entry = max(tx_entry, ty_entry);
+	t_exit = min(tx_exit, ty_exit);
+
+	if (t_entry > t_exit) return;
+
+	t = t_entry;
+
+	if (tx_entry > ty_entry)
+	{
+		ny = 0.0f;
+		dx > 0 ? nx = -1.0f : nx = 1.0f;
+	}
+	else
+	{
+		nx = 0.0f;
+		dy > 0 ? ny = -1.0f : ny = 1.0f;
+	}
+
+}
 CGame* CGame::GetInstance()
 {
 	if (__instance == NULL) __instance = new CGame();

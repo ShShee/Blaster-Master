@@ -1,5 +1,8 @@
 #pragma once
 #include "GameObject.h"
+#include "Item.h"
+#include "Sound.h"
+
 class Enemy : public MovingObject
 {
 protected:
@@ -7,13 +10,19 @@ protected:
 	float y_end;
 	float x_start;
 	float y_start;
+
+	//float lastvx;
 	bool DrawCenter = false;
 public:
 	 Enemy(float x = 0, float y = 0, float vx=0,float vy=0, float limited_move_x = 0, float limited_move_y = 0,bool DrawCenter=false)
 		:MovingObject(x, y,vx,vy) {
-		 this->x_end = limited_move_x + x; this->y_end = limited_move_y + y; this->x_start = x; this->y_start = y; this->DrawCenter = DrawCenter;
+		 this->x_end = limited_move_x + x; this->y_end = -limited_move_y + y; 
+		 this->x_start = x-limited_move_x; this->y_start = y; 
+		 this->DrawCenter = DrawCenter; this->HealthPoint = 3;
+		 this->ClassEnemy = 0;
 	}
-	virtual void Update(DWORD dt);
+	virtual void Update(DWORD dt,vector<GameObject*> *coOBject);
+	void DropItem();
 	void Render();
 };
 class CAC_Enemy : public Enemy //Change Animations Constantly
@@ -23,16 +32,32 @@ public:
 		:Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
 		this->designatedFrame = -1;
 	};
+	void Update(DWORD dt, vector<GameObject*>* coOject);
 };
 
 class CAWA_Enemy : public Enemy //Change Animations While Attacking
 {
-protected:
 public:
-	CAWA_Enemy(float x = 0, float y = 0, float vx = 0,float vy=0, float limited_move_x = 0,float limited_move_y=0, bool DrawCenter = false)
+	CAWA_Enemy(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
 		:Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
 		this->designatedFrame = 0;
 	};
+};
+
+class Enemy_Dome : public CAC_Enemy
+{
+protected:
+	bool FlagFalling = false;
+	bool FlagAttack = false;
+	bool FlagUseless = false;
+	float holdtimer = 0;
+	float vtHold = 0.0f;
+public:
+	Enemy_Dome(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
+		:CAC_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
+		vy > 0 ? this->currentAni = 2 : this->currentAni = 0;
+	}
+	void Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target);
 };
 
 class Enemy_Jumper : public CAC_Enemy
@@ -40,31 +65,16 @@ class Enemy_Jumper : public CAC_Enemy
 public:
 	Enemy_Jumper(float x = 0, float y = 0, float vx = 0, float limited_move_x=0, bool DrawCenter=false) 
 		:CAC_Enemy(x, y, vx, NULL, limited_move_x, NULL, DrawCenter) {}
-	void Update(DWORD dt,float x_target,float y_target);
+	void Update(DWORD dt, vector<GameObject*>* coOBject,float x_target,float y_target);
 };
 
 class Enemy_Worm : public CAC_Enemy
 {
 public:
-	Enemy_Worm(float x = 0, float y = 0, float vx = 0,float vy=0, float limited_move_x = 0, bool DrawCenter = false)
-		:CAC_Enemy(x, y, vx, vy, limited_move_x, NULL, DrawCenter) {}
-	void Update(DWORD dt,float x_target,float y_target);
-};
-
-class Enemy_Bomber : public CAWA_Enemy
-{
-public:
-	Enemy_Bomber(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
-		:CAWA_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {}
-	void Update(DWORD dt,float x_target,float y_target);
-};
-
-class Enemy_Floater : public CAWA_Enemy
-{
-public:
-	Enemy_Floater(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
-		:CAWA_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {}
-	void Update(DWORD dt);
+	Enemy_Worm(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, bool DrawCenter = false)
+		:CAC_Enemy(x, y, vx, vy, limited_move_x, NULL, DrawCenter) {
+	}
+	void Update(DWORD dt, vector<GameObject*>* coOBject,float x_target,float y_target);
 };
 
 class Enemy_Insect : public CAC_Enemy
@@ -72,47 +82,24 @@ class Enemy_Insect : public CAC_Enemy
 public:
 	Enemy_Insect(float x = 0, float y = 0,float vx=0,float vy=0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
 		:CAC_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {}
-	void Update(DWORD dt);
-};
-
-class Enemy_Dome : public CAC_Enemy
-{
-public:
-	Enemy_Dome(float x = 0, float y = 0, float vx = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
-		:CAC_Enemy(x, y, vx, 0, limited_move_x, limited_move_y, DrawCenter) {}
-	void Update(DWORD dt,float x_target,float y_target);
+	void Update(DWORD dt, vector<GameObject*>* coOBject);
 };
 
 class Enemy_Orb : public CAWA_Enemy
 {
 public:
-	Enemy_Orb(float x = 0, float y = 0,float vx=0,float vy=0,float limited_move_x=0,float limited_move_y=0, bool DrawCenter = false)
-		:CAWA_Enemy(x, y, 0.08f, vy, limited_move_x, limited_move_y, DrawCenter) {}
-	void Update(DWORD dt,float x_target,float y_target);
-};
-
-class Enemy_EyeBall: public CAC_Enemy
-{
-public:
-	Enemy_EyeBall(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
-		:CAC_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {}
-	void Update(DWORD dt);
-};
-
-class Enemy_Cannon : public CAC_Enemy
-{
-public:
-	Enemy_Cannon(float x = 0, float y = 0, bool DrawCenter = false)
-		:CAC_Enemy(x, y, 0,0,0,0, DrawCenter) {}
-	void Update(DWORD dt);
+	Enemy_Orb(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
+		:CAWA_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
+	}
+	void Update(DWORD dt, vector<GameObject*>* coOBject/*, float x_target, float y_target*/);
 };
 
 class Enemy_Teleporter : public CAWA_Enemy
 {
 protected:
-	int flag=0;
+	int flag = 0;
 public:
 	Enemy_Teleporter(float x = 0, float y = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
 		:CAWA_Enemy(x, y, 0, 0, limited_move_x, limited_move_y, DrawCenter) {}
-	void Update(DWORD dt,float x_target,float y_target);
+	void Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target);
 };

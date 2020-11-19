@@ -2,15 +2,15 @@
 //
 //Enemy_Bomber* bomber = new Enemy_Bomber(0.0f, 30.0f, 0.06f, NULL, 285.0f, NULL);
 //
-//Enemy_Worm* worm = new Enemy_Worm(0.0f, 147.0f, 0.05f, NULL, 303.0f);
+
 //
-//Enemy_Floater* floater = new Enemy_Floater(0.0f, 0.0f, 0.01f, 0.03f, 60.0f, 60.0f);
+
 //
 //Enemy_Insect* insect = new Enemy_Insect(10.0f, 20.0f, 0.01f, NULL, 40.0f, 80.0f, true);
 //
 //Enemy_Dome* dome = new Enemy_Dome(192.0f, 54.0f,0.02f, 48.0f, 32.5f);
 //
-//Enemy_Dome* dome = new Enemy_Dome(5.0f, 5.0f, 0.1f, 260.0f, 235.0f);
+
 //
 //Enemy_Orb* orb = new Enemy_Orb(10.0f, 20.0f, 0.01f, 0.02f, 100.0f, 100.0f, true);
 //

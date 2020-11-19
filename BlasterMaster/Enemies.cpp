@@ -1,144 +1,179 @@
 #include "Enemies.h"
 
-
-void Enemy::Update(DWORD dt)
+void Enemy::Update(DWORD dt, vector<GameObject*>* coOBject)
 {
-	MovingObject::Update(dt);
-	if ((vx > 0 && x >= x_end) || (x < x_start && vx < 0)) vx = -vx;
+		nx = 0; ny = 0;
+		GameObject::Update(dt);
+		GameObject::UpdateCollision(coOBject);
+
+		if (GetTickCount() - untouchable_start > 150)
+		{
+			untouchable_start = 0;
+			untouchable = 0;
+		}
+		if (untouchable != 0) RenderColor = 0; else RenderColor = 255;
+}
+
+void CAC_Enemy::Update(DWORD dt, vector<GameObject*>* coOject)
+{
+	Enemy::Update(dt, coOject);
 	if (vx < 0 && animations.size()>1)	currentAni = 1; else currentAni = 0;
+	if ((vx > 0 && x >= x_end) || (x < x_start && vx < 0)) vx = -vx;
+	if (ny != 0) vy = 0;
+}
+
+void Enemy::DropItem()
+{
+	int Id_ItemDropped = ItemHolder::GetInstance()->GenerateItem(ClassEnemy);
+	if (Id_ItemDropped != -1)
+	{
+		GameObject* DropItem = new Item();
+		DropItem->SetPos(x, y + 4.0f);
+		DropItem->Add_Image(Id_ItemDropped);
+		IdItemDropped = ItemHolder::GetInstance()->AddItem(DropItem);
+	}
+	Id_ItemDropped != -1 ? DropItemState = DROPPED : DropItemState = DNT_DROP;
 }
 
 void Enemy::Render()
 {
-	animations[currentAni]->Render(x, y, designatedFrame, DrawCenter);
-}
-
-void Enemy_Jumper::Update(DWORD dt,float x_target,float y_target)
-{
-	Enemy::Update(dt);
-	vy -= 0.1f;
-	if (y < y_start) 
+	if (HealthPoint > 0)
 	{
-			vy = 0;
-			y = y_start;
+		//RenderBoundingBox();
+		animations[currentAni]->Render(x, y, designatedFrame, DrawCenter,false,RenderColor);
 	}
-	if ((x<x_target && x+20>x_target)|| (x > x_target && x - 20 < x_target)) if (y == y_end) vy = +/*gravity_effect*/0.4f;
 }
 
-void Enemy_Bomber::Update(DWORD dt,float x_target,float y_target)
+void Enemy_Dome::Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target)
 {
-	Enemy::Update(dt);
-	if ((x<x_target && x + 40>x_target) || (x > x_target && x - 40 < x_target)) if (y == y_start) vy = +0.03f;
-	if (y >= y_end) 
+	vector<GameObject*> RawcoObject;
+	for (int i = 0; i < coOBject->size() - 1; i++)
 	{
-		y = y_end; vy = 0.0f; vx = 0.0f;
+		RawcoObject.push_back(coOBject->at(i));
 	}
-	if (vy > 0) designatedFrame = 1; else designatedFrame = 0;
+	Enemy::Update(dt, &RawcoObject);
+	holdtimer += vtHold * dt;
+
+	if (x<x_start || x>x_end) vx = -vx;
+	if (x_target  < x_end && x_target > x_start - 60.0f && currentAni == 2 && FlagAttack == false && FlagUseless == false)
+	{
+		vy = -0.15f;
+		vx = 0;
+		FlagAttack = true;
+		FlagUseless = true;
+	}
+	else if (FlagAttack == true)
+	{
+		if (ny != 0)
+		{
+			vy = -0.02f;
+			vx = -0.02f;
+			currentAni = 0;
+			FlagAttack = false;
+		}
+	}
+	else if (FlagUseless == false)
+	{
+		if (nx == 0 && (currentAni == 3 || currentAni == 1) && holdtimer == 0)
+		{
+			vy = -(vy * 5);
+			vx > 0 ? vx = 0.02f : vx = -0.02f;
+			currentAni = 2;
+			vtHold = 0.5f;
+		}
+		else if (ny == 0 && (currentAni == 0 || currentAni == 2) && holdtimer > 100)
+		{
+			vx > 0 ? currentAni = 1 : currentAni = 3;
+			vy > 0 ? vy = 0.02f : vy = -0.02f;
+			holdtimer = 0;
+			vtHold = 0;
+			FlagFalling = true;
+			vx = -(vx * 5);
+		}
+		else if (nx != 0 && ny != 0)
+		{
+			if (FlagFalling == false)
+			{
+				vy = -vy;
+				vx > 0 ? currentAni = 3 : currentAni = 1;
+				vx = vx * 5;
+			}
+			else
+			{
+				vy > 0 ? currentAni = 2 : currentAni = 0;
+				vx > 0 ? vx = -0.02f : vx = 0.02f;
+				FlagFalling = false;
+			}
+		}
+	}
 }
 
-void Enemy_Worm::Update(DWORD dt,float x_target,float y_target)
+void Enemy_Jumper::Update(DWORD dt, vector<GameObject*>* coOBject,float x_target,float y_target)
 {
-	Enemy::Update(dt);
-	if (/*(*//*x - 20 <= x_target && */(x >=x_target && vx>0) || (x<=x_target && vx<0)/*|| x-10<=x_target*//*) && y==y_target*/) vx = -vx;
+	
+	CAC_Enemy::Update(dt,coOBject);
+	if(vy!=0) vy -= 0.01f;
+	if ((x<x_target && x + 20>x_target) || (x > x_target && x - 30 < x_target)) if (vy == 0)
+	{
+		vy = +0.1f;
+	}
 }
 
-void Enemy_Floater::Update(DWORD dt)
+void Enemy_Worm::Update(DWORD dt, vector<GameObject*>* coOBject,float x_target,float y_target)
 {
-	Enemy::Update(dt);
-	if ((vy > 0 && y >= y_end) || (y < y_start && vy < 0)) vy = -vy;
-}
-
-void Enemy_Insect::Update(DWORD dt)
-{
-	vy += 0.001f;
-	if (y >= y_end) vy = -0.06f;
-	//if (y < y_start) vy = 0.01f;
-	Enemy::Update(dt);
-}
-
-void Enemy_Dome::Update(DWORD dt,float x_target,float y_target)
-{
-	MovingObject::Update(dt);
-	if (x >= x_end && y <= y_start) {
-		currentAni = 3; vy = 0.1f; vx = 0;
-		//if (x + 10 >= x_target && x_target > x && vx > 0) {
-		//	vx = 0; vy = 0.2f;
-		//}
-	}
-	if ((y >= y_end && x>=x_end)/* || (x < x_start && y < y_end && y>y_start)*/) {
-		currentAni = 0; vx = -0.1f; vy = 0;
-	}
-	if (x <=x_start && y >= y_end) { 
-		currentAni = 1; vy = -0.1f; vx = 0; 
-		//if (y +10 >= y_target && y_target > y && vy > 0) {
-		//	vy = 0; vx = -0.2f;
-		//}
-	}
-	if ((x <= x_start && y<=y_start)/* || (x<x_end && y < y_end && y>y_start)*/) {
-		currentAni = 2; vy = 0; vx = 0.1f;
-		//if (x-2 <= x_target && x_target < x && vx < 0) {
-		//	vx = 0; vy = -0.2f;
-		//}
-	}
-
-	//if ((y >= y_end && vx>0)||(y< y_start && vx<0)) vx = -vx;
-	//if ((vx > 0 && x < x_end)|| (/*vx <0 && */y>= y_end))
+	CAC_Enemy::Update(dt,coOBject);
+	//if (((x >= x_target && vx > 0) || (x <= x_target && vx < 0)) 
+	//	&& x_target<x_end && x_target>x_start && RenderColor==255)
 	//{
-	//	x += vx * dt;
+	//	vx = -vx;
 	//}
-	//if ((vx > 0 && x >= x_end && y< y_end)||(x<=x_start && vx<0)) {
-	//	y += vx * dt;
-	//}
-	//if (x<x_end && vx>0 && y<y_end)		currentAni = 0;
-	//else if(x>= x_end && vx>0 && y< y_end) currentAni = 1;
-	//else if (y >y_end && vx<0 && x< x_end && x>x_start) currentAni = 2;
-	//else if (x<= x_start && vx < 0 && y < y_end) currentAni = 3;
+	if (x_start-60.0f < x_target && x_target<x_end)
+	{
+		vy = -0.2f;
+	}
 }
 
-void Enemy_Orb::Update(DWORD dt,float x_target,float y_target)
+void Enemy_Insect::Update(DWORD dt, vector<GameObject*>* coOBject)
 {
-	if (vy == 0)
-	{
-		x += vx * dt;
-		if (x < x_end && x> x_start)
+	CAC_Enemy::Update(dt, coOBject);
+	vy += 0.0008f;
+	if ( y>y_start) vy = -0.04f;
+	/*else if( y<y_end)*/
+	//if (y < y_start) vy = 0.01f;
+}
+
+void Enemy_Orb::Update(DWORD dt, vector<GameObject*>* coOBject/*,float x_target,float y_target*/)
+{
+	//if (vy == 0)
+	//{
+		Enemy::Update(dt, coOBject);
+		if (/*(x < x_end && x> x_start)||*/nx==0)
 			designatedFrame = 0;
-		else
+		else /*if (nx!=0 || x>x_end || x<x_start)*/ if (nx!=0)
 		{
 			designatedFrame = -1;
-			vx = 0;
 			if (animations[currentAni]->GetCurrentFrame() == 3)
 			{
-				if (x >= x_end) vx = -0.01f; else vx = 0.01f;
+				vx = -vx;
 				//animations[currentAni]->SetCurrentFrame(0);
 				if (vx < 0) currentAni = 1; else currentAni = 0;
 			}
 		}
-	}
-	else
-	{
-		if ((vx > 0 && x >= x_end) || (x < x_start && vx < 0)) vx = -vx;
-		if ((vy > 0 && y >= y_end) || (y < y_start && vy < 0)) vy = -vy;
-		if (x_target < x_end && y_target < y_end)
-		{
-			currentAni = 2; designatedFrame = -1;
-			if ((x >= x_target && vx>0)) x=x_target; else x += vx * dt;
-			if ((y >= y_target && vy>0)) y=y_target; else y += vy * dt;
-		}
-	}
+	//}
+	//else
+	//{
+	//	if ((vx > 0 && x >= x_end) || (x < x_start && vx < 0)) vx = -vx;
+	//	if ((vy > 0 && y >= y_end) || (y < y_start && vy < 0)) vy = -vy;
+	//	if (x_target < x_end && y_target < y_end)
+	//	{
+	//		currentAni = 2; designatedFrame = -1;
+	//		if ((x >= x_target && vx>0)) x=x_target; else x += vx * dt;
+	//		if ((y >= y_target && vy>0)) y=y_target; else y += vy * dt;
+	//	}
+	//}
 }
 
-void Enemy_EyeBall::Update(DWORD dt)
-{
-	Enemy::Update(dt);
-	if ((vy > 0 && y >= y_end) || (y < y_start && vy < 0)) vy = -vy;
-}
-
-void Enemy_Cannon::Update(DWORD dt)
-{
-
-}
-
-void Enemy_Teleporter::Update(DWORD dt,float x_target,float y_target)
+void Enemy_Teleporter::Update(DWORD dt, vector<GameObject*>* coOBject,float x_target,float y_target)
 {
 	MovingObject::Update(dt);
 	if ((x_target + 100.0f >= x && x_target <= x) || (x_target - 100.0f <= x && x_target >= x))
@@ -173,3 +208,4 @@ void Enemy_Teleporter::Update(DWORD dt,float x_target,float y_target)
 	}
 	else designatedFrame = 0;
 }
+
