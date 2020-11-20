@@ -73,10 +73,10 @@ void Weapon::AddBullet(int WeaponType, int curBullet, float x, float y, float vx
 		addblt = new HomingMissile(x, y, vx, vy, type);
 		addblt->Add_Image(BulletID[curBullet]);//ani 1
 
-		if (type ==1 || type ==2)
-			(WeaponType == 1 && curBullet == 0) ? addblt->Add_Image(BulletID[1]) : addblt->Add_Image(BulletID[0]);//ani 2 with special
+		//if (type ==1 || type ==2)
+		//	(WeaponType == 1 && curBullet == 0) ? addblt->Add_Image(BulletID[1]) : addblt->Add_Image(BulletID[0]);//ani 2 with special
 
-		if (type >=3) addblt->Add_Image(BulletID[curBullet + 1]);
+		if (type >=2) addblt->Add_Image(BulletID[curBullet + 1]);
 		else addblt->Add_Image(BulletID[2]);//ani 2 with normal and 3 with special
 		addblt->SetFlip(FlipX);
 		BulletCount.push_back(addblt);
@@ -132,12 +132,12 @@ void Bullet::SetFlip(bool FlipFlag)
 
 void Bullet::SetLimitationByType(int type)
 {
-	if (type == 3) { limitationX = x + 100.0f; limitationY = y + 0.0f; }
-	else if (type == 4 || type==7) { limitationX = x - 100.0f; limitationY = y + 0.0f; }
-	else if (type == 0) { limitationX = x + 150.0f; limitationY = y + 0.0f; }
-	else if (type == 1) { limitationX = x - 150.0f; limitationY = y + 0.0f; }
-	else if (type == 2) { limitationX = x + 0.0f; limitationY = y + 150.0f; }
-	else if (type == 5) { limitationX = x + 0.0f; limitationY = y - 150.0f; }
+	if (type == 3) { limitationX = x + 100.0f; limitationY = y + 0.0f; }//->
+	else if (type == 4 || type==7) { limitationX = x - 100.0f; limitationY = y + 0.0f; } //<-
+	else if (type == 0) { limitationX = x + 150.0f; limitationY = y + 0.0f; } // ->
+	else if (type == 1) { limitationX = x - 150.0f; limitationY = y + 0.0f; } // <-
+	else if (type == 2) { limitationX = x + 0.0f; limitationY = y + 150.0f; } // /->
+	else if (type == 5) { limitationX = x + 0.0f; limitationY = y - 150.0f; }// \->
 }
 
 void HomingMissile::Update(DWORD dt, vector<GameObject*>* coObject)
@@ -149,10 +149,10 @@ void HomingMissile::Update(DWORD dt, vector<GameObject*>* coObject)
 		if (coObject->at(i)->IsAbletoMove() == false)
 			OnlyMap.push_back(coObject->at(i));
 	}
-	if (type >= 5)
-	{
+	//if (type >= 5)
+	//{
 		OnlyMap.push_back(coObject->at(coObject->size()-1));
-	}
+	//}
 	//else if (type != 5)
 	//{
 	//	for (UINT i = 0; i < coObject->size()-2; i++)
@@ -175,7 +175,7 @@ void HomingMissile::Update(DWORD dt, vector<GameObject*>* coObject)
 	//if (x >= x_target - 8.0f || x <= x_target + 8.0f) vx = 0;
 	//if (y >= y_target - 8.0f || y <= y_target + 8.0f) vy = 0;
 	GameObject::UpdateCollision(&OnlyMap);
-	if ((nx != 0 || ny != 0) && type==5)
+	if ((nx != 0 || ny != 0) && type!=7)
 	{
 		vx = 0; vy = 0; 
 	 FlagCollision = true;
@@ -249,7 +249,38 @@ void Enemy_Floater::Update(DWORD dt, vector<GameObject*>* coOBject, float x_targ
 
 void Enemy_Cannon::Update(DWORD dt, vector<GameObject*>* coOBject)
 {
-
+	Enemy::Update(dt, coOBject);
+	wp.Update(dt, coOBject);
+	CoolDown -= vtCD * dt;
+	if (CoolDown <= 2000 && CoolDown>1500)
+	{
+		if (FlagFired == false)
+		{
+			wp.AddBullet(1, 1, x + 26.0f, y - 11.0f, 0.3f, 0.0f, false, 3);
+			wp.AddBullet(1, 1, x, y - 11.0f, -0.3f, 0.0f, false, 4);
+			FlagFired = true;
+		}
+		designatedFrame = 1;
+	}
+	else if (CoolDown < 1000 && CoolDown>=500)
+	{
+		if (FlagFired == false)
+		{
+			wp.AddBullet(1, 1, x + 11.0f, y, 0.0f, 0.3f, false, 2);
+			wp.AddBullet(1, 1, x+11.0, y - 26.0f, 0.0f, -0.3f, false, 5);
+			FlagFired = true;
+		}
+		designatedFrame = 2;
+	}
+	else if (CoolDown < 500)
+	{
+		CoolDown = 2500;
+	}
+	else
+	{
+		designatedFrame = 0;
+		FlagFired = false;
+	}
 }
 
 ControllableChar::ControllableChar()
@@ -397,6 +428,6 @@ bool ControllableChar::LockCam(float x, float y)
 
 void Enemy_With_Weapon::CreateSprite()
 {
-		wp.AddBulletId(750);
+		wp.AddBulletId(753);
 		wp.AddBulletId(751);
 }

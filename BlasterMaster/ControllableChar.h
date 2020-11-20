@@ -101,10 +101,15 @@ public:
 
 class Enemy_Cannon : public CAWA_Enemy,public Enemy_With_Weapon
 {
+private:
+	bool FlagFired = false;
 public:
 	Enemy_Cannon(float x = 0, float y = 0, bool DrawCenter = false)
 		:CAWA_Enemy(x, y, 0, 0, 0, 0, DrawCenter) {
+		wp.AddBulletId(753);
 		CreateSprite();
+		CoolDown = 6000;
+		vtCD = 0.5f;
 	}
 	void Update(DWORD dt, vector<GameObject*>* coOBject);
 	void Render() { if (HealthPoint > 0) { Enemy::Render(); Enemy_With_Weapon::Render(); } }
