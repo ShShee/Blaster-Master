@@ -196,6 +196,23 @@ void WorldMap::SetListItem()
 		ani->Add(2068);
 		animations->Add(218, ani);
 
+		//cannon
+		sprites->Add(2070, 132, 603, 158, 629, texEnemy);
+		sprites->Add(2071, 162, 603, 184, 629, texEnemy);
+		sprites->Add(2072, 187, 607, 213, 629, texEnemy);
+		ani = new CAnimation(600);
+		ani->Add(2070);
+		ani->Add(2071);
+		ani->Add(2072);
+		animations->Add(219, ani);
+
+		//tele
+		sprites->Add(2073, 132, 568, 156, 600, texEnemy);
+		sprites->Add(2074, 159, 568, 183, 600, texEnemy);
+		ani = new CAnimation(300);
+		ani->Add(2074);
+		ani->Add(2073);
+		animations->Add(220, ani);
 	}
 	#pragma endregion Add Texture
 	#pragma region Map
@@ -413,20 +430,51 @@ void WorldMap::SetListItem()
 		}
 		else if (type == 2)
 		{
-			////EyeBall
+			//EyeBall
 			if (objectGroup->GetName() == "EyeBall")
 			{
 				for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
 				{
 				Tmx::Object* object = objectGroup->GetObjects().at(j);
 				Enemy_EyeBall* floater = new Enemy_EyeBall(object->GetX(), 2032.0f - object->GetY()
-					, object->GetId() % 2 == 1 ? 0.018f : -0.018f, -0.01f, 50.0f, 50.0f);
+					, object->GetId() % 2 == 1 ? 0.018f : -0.018f, object->GetId() % 2 == 1 ?-0.01f:0.01f, 50.0f, 40.0f);
 				floater->Add_Image(217);
 				floater->Add_Image(218);
 				floater->SetId(idEnemy);
 				floater->SetLayer(ENEMIES_WITH_TARGET);
-				ListMapItem.push_back(floater); // eyeball heritated from floater
+				ListMapItem.push_back(floater);
 				idEnemy++;
+				}
+			}
+
+			//Tele
+			if (objectGroup->GetName() == "Tele")
+			{
+				for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
+				{
+					Tmx::Object* object = objectGroup->GetObjects().at(j);
+					Enemy_Teleporter* tele =new Enemy_Teleporter(object->GetX(), 2032.0f - object->GetY()
+						, object->GetId() % 2 == 1 ? 0.1f : 0.0f, object->GetId() % 2 == 0 ? 0.1f : 0.0f,100.0f,100.0f);
+					tele->Add_Image(220);
+					tele->SetId(idEnemy);
+					tele->SetLayer(ENEMIES_WITH_TARGET);
+					ListMapItem.push_back(tele);
+					idEnemy++;
+				}
+			}
+
+			//Cannon
+			if (objectGroup->GetName() == "Cannon")
+			{
+				for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
+				{
+					Tmx::Object* object = objectGroup->GetObjects().at(j);
+					Enemy_Cannon* cannon = new Enemy_Cannon(object->GetX(), 2032.0f - object->GetY());
+					cannon->Add_Image(219);
+					cannon->SetId(idEnemy);
+					cannon->SetLayer(ENEMIES_WITHOUT_TARGET);
+					ListMapItem.push_back(cannon);
+					idEnemy++;
 				}
 			}
 		}

@@ -138,74 +138,82 @@ void Enemy_Insect::Update(DWORD dt, vector<GameObject*>* coOBject)
 	CAC_Enemy::Update(dt, coOBject);
 	vy += 0.0008f;
 	if ( y>y_start) vy = -0.04f;
-	/*else if( y<y_end)*/
-	//if (y < y_start) vy = 0.01f;
 }
 
 void Enemy_Orb::Update(DWORD dt, vector<GameObject*>* coOBject/*,float x_target,float y_target*/)
 {
-	//if (vy == 0)
-	//{
 		Enemy::Update(dt, coOBject);
-		if (/*(x < x_end && x> x_start)||*/nx==0)
+		if (nx==0)
 			designatedFrame = 0;
-		else /*if (nx!=0 || x>x_end || x<x_start)*/ if (nx!=0)
+		else if (nx!=0)
 		{
 			designatedFrame = -1;
 			if (animations[currentAni]->GetCurrentFrame() == 3)
 			{
 				vx = -vx;
-				//animations[currentAni]->SetCurrentFrame(0);
 				if (vx < 0) currentAni = 1; else currentAni = 0;
 			}
 		}
-	//}
-	//else
-	//{
-	//	if ((vx > 0 && x >= x_end) || (x < x_start && vx < 0)) vx = -vx;
-	//	if ((vy > 0 && y >= y_end) || (y < y_start && vy < 0)) vy = -vy;
-	//	if (x_target < x_end && y_target < y_end)
-	//	{
-	//		currentAni = 2; designatedFrame = -1;
-	//		if ((x >= x_target && vx>0)) x=x_target; else x += vx * dt;
-	//		if ((y >= y_target && vy>0)) y=y_target; else y += vy * dt;
-	//	}
-	//}
 }
 
 void Enemy_Teleporter::Update(DWORD dt, vector<GameObject*>* coOBject,float x_target,float y_target)
 {
-	MovingObject::Update(dt);
-	if ((x_target + 100.0f >= x && x_target <= x) || (x_target - 100.0f <= x && x_target >= x))
+	timerCD -= vtCD * dt;
+	if (x_target >= x_start && x_target <= x_end && timerCD<0)
 	{
-		designatedFrame = 1;
-		//if (x <= x_start && y<=y_start) {
-		//	vx = 0.6f; vy = 0.0f;
-		//}
-		//if (x >= x_end && y<=y_start)
-		//{
-		//	x = x_end;
-		//	if (flag == 0)
-		//	{
-		//		vx = -0.6f; vy = 0.0f;
-		//		flag = 1;
-		//	}
-		//}
-		//if (flag==1 && x>=x_end && y<=y_start)
-		//{
-		//	vy = 0.6f; vx = 0.0f;
-		//}
-		//if (x >= x_end && y >= y_end)
-		//{
-		//	y = y_end;
-		//		if (flag == true)
-		//		{
-		//			vy = -0.6; vx = 0.0f;
-		//			flag = false;
-		//		}
-		//}
-		
+		vx = tempSpeedX; vy = tempSpeedY;
+		Enemy::Update(dt, coOBject);
+		if (tempSpeedX != 0)
+		{
+			if ((x>distance && FlagFinish==false)||x<prevpos)
+			{
+				tempSpeedX = -tempSpeedX;
+				if (x < prevpos) FlagFinish = true;
+			}
+			else if ((x>distance && FlagFinish==true)||nx!=0)
+			{
+				vtCD = 0.5f;
+				timerCD = 1000;
+				vx = 0;
+				FlagFinish = false;
+				if (nx != 0) 
+				{
+					tempSpeedX = -tempSpeedX;
+				}
+			}
+		}
+		if (tempSpeedY != 0)
+		{
+			if ((y > distance && FlagFinish == false) || (y < prevpos))
+			{
+				tempSpeedY = -tempSpeedY;
+				if (y < prevpos) FlagFinish = true;
+			}
+			else if ((y > distance && FlagFinish == true) || ny != 0)
+			{
+				vtCD = 0.5f;
+				timerCD = 1000;
+				vy = 0;
+				FlagFinish = false;
+				if (ny != 0)
+				{
+					tempSpeedY = -tempSpeedY;
+				}
+			}
+		}
 	}
-	else designatedFrame = 0;
+	if (vx == 0 && vy == 0)
+	{
+		designatedFrame = 0;
+		if (tempSpeedX == 0)
+		{
+			tempSpeedY > 0 ? distance = y + 30.0f, prevpos = y : distance = y, prevpos = y - 30.0f;
+		}
+		else if (tempSpeedY == 0)
+		{
+			tempSpeedX > 0 ? distance = x + 30.0f, prevpos = x : distance = x, prevpos = x - 30.0f;
+		}
+	}
+	else designatedFrame = 1;
 }
 

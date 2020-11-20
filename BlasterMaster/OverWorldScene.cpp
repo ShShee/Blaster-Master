@@ -47,6 +47,8 @@ void OverWorldScene::Update(DWORD dt)
 		if (coObjects[i]->GetLayer() == ENEMIES_WITH_TARGET)
 			coObjects[i]->Update(dt, &coObjects,
 				ReadyPlayer1->Get_CurPlayer_lastX(), ReadyPlayer1->Get_CurPlayer_lastY());
+		else if (coObjects[i]->GetLayer() == ENEMIES_WITHOUT_TARGET)
+			coObjects[i]->Update(dt, &coObjects);
 	}
 	coObjects.pop_back();
 	for (GameObject* umobj : Items)

@@ -97,9 +97,20 @@ public:
 class Enemy_Teleporter : public CAWA_Enemy
 {
 protected:
-	int flag = 0;
+	bool FlagFinish = false;
+	bool FlagSetTo0 = false;
+	float timerCD = -1;
+	float vtCD = 0;
+	float distance = 0;
+	float prevpos = 0;
+	float tempSpeedX = 0;
+	float tempSpeedY = 0;
 public:
-	Enemy_Teleporter(float x = 0, float y = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
-		:CAWA_Enemy(x, y, 0, 0, limited_move_x, limited_move_y, DrawCenter) {}
+	Enemy_Teleporter(float x = 0, float y = 0,float vx=0,float vy=0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
+		:CAWA_Enemy(x, y, 0, 0, limited_move_x, limited_move_y, DrawCenter) {
+		tempSpeedX = vx;
+		tempSpeedY = vy;
+	}
 	void Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target);
+	void HP_down() { if (designatedFrame == 1) HealthPoint--; }
 };

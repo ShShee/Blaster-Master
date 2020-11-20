@@ -135,7 +135,7 @@ public:
 	float Get_vy() { return vy; }
 	virtual bool IsAbletoMove() = 0;
 	void HP_up() { HealthPoint ++; }
-	void HP_down() { HealthPoint --; }
+	virtual void HP_down() { HealthPoint --; }
 	int GetHP() { return HealthPoint; }
 	void SetLayer(int layer) { this->layer = layer; }
 	int GetLayer() { return this->layer; }
