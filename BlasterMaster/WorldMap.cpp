@@ -11,22 +11,29 @@ void WorldMap::LoadMap(const char* filePath,int type)
 
 	if(type==1)
 	CTextures::GetInstance()->Add(ID_TEX_TILESET, L"SpritesSource\\level2-side_bank.png", D3DCOLOR_XRGB(0, 255, 255));
-	else
+	else if (type==2)
 	CTextures::GetInstance()->Add(ID_TEX_TILESET, L"SpritesSource\\level2-over_bank.png", D3DCOLOR_XRGB(0, 255, 255));
+	else
+	CTextures::GetInstance()->Add(ID_TEX_TILESET, L"SpritesSource\\Ending_bank.png", D3DCOLOR_XRGB(0, 255, 255));
 	CTextures::GetInstance()->Add(ID_TEX_ENEMY, L"SpritesSource\\Enemies.png", D3DCOLOR_XRGB(255, 255, 255));
 	CTextures::GetInstance()->Add(ID_TEX_TEST, L"SpritesSource\\Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_BOSS, L"SpritesSource\\Boss.png", D3DCOLOR_XRGB(0, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_ENDING, L"SpritesSource\\Ending.png", D3DCOLOR_XRGB(0, 255, 255));
 
 	texMap = CTextures::GetInstance()->Get(ID_TEX_TILESET);
 	texEnemy = CTextures::GetInstance()->Get(ID_TEX_ENEMY);
-}
-void WorldMap::SetEnemiesTexture()
-{
-
+	texBoss = CTextures::GetInstance()->Get(ID_TEX_BOSS);
+	texEnding= CTextures::GetInstance()->Get(ID_TEX_ENDING);
 }
 void WorldMap::SetListItem()
 {
 	int id,left,top,right,bottom,idEnemy;
-	this->type == 1 ? id = 3000, idEnemy = 1000 : id = 60000, idEnemy = 2000;
+	switch (this->type)
+	{
+	case 1: id = 3000; idEnemy = 1000; break;
+	case 2:	id = 60000, idEnemy = 2000; break;
+	case 3: id = 90000, idEnemy = 3000; break;
+	}
 	CSprites* sprites = CSprites::GetInstance();
 	CAnimations* animations = CAnimations::GetInstance();
 	LPANIMATION ani;
@@ -198,8 +205,8 @@ void WorldMap::SetListItem()
 
 		//cannon
 		sprites->Add(2070, 132, 603, 158, 629, texEnemy);
-		sprites->Add(2071, 162, 603, 184, 629, texEnemy);
-		sprites->Add(2072, 187, 607, 213, 629, texEnemy);
+		sprites->Add(2071, 158, 603, 184, 629, texEnemy);
+		sprites->Add(2072, 187, 603, 213, 629, texEnemy);
 		ani = new CAnimation(600);
 		ani->Add(2070);
 		ani->Add(2071);
@@ -209,10 +216,147 @@ void WorldMap::SetListItem()
 		//tele
 		sprites->Add(2073, 132, 568, 156, 600, texEnemy);
 		sprites->Add(2074, 159, 568, 183, 600, texEnemy);
-		ani = new CAnimation(300);
+		ani = new CAnimation(100);
 		ani->Add(2074);
 		ani->Add(2073);
 		animations->Add(220, ani);
+
+		//Boss
+		sprites->Add(2075, 80, 365, 140, 431, texBoss);
+		sprites->Add(2077, 209, 365, 269, 431, texBoss);
+
+		//
+		sprites->Add(2079, 81, 504, 141, 570, texBoss);
+		sprites->Add(2080, 146, 504, 206, 570, texBoss);
+		sprites->Add(2081, 212, 504, 272, 570, texBoss);
+		sprites->Add(2082, 278, 504, 338, 570, texBoss);
+		//
+
+		sprites->Add(2083, 85, 640, 145, 706, texBoss);
+		sprites->Add(2085, 214, 640, 274, 706, texBoss);
+
+		sprites->Add(2087, 83, 777, 143, 843, texBoss);
+		sprites->Add(2089, 215, 777, 275, 843, texBoss);
+
+		sprites->Add(2091, 82, 916, 142, 982, texBoss);
+		sprites->Add(2093, 214, 916, 274, 982, texBoss);
+
+		sprites->Add(2095, 85, 1055, 145, 1121, texBoss);
+		sprites->Add(2097, 218, 1055, 278, 1121, texBoss);
+		//
+		sprites->Add(2101, 139, 1124, 155, 1141, texBoss);
+		sprites->Add(2102, 141, 1142, 159, 1174, texBoss);
+		//
+
+		sprites->Add(2103, 66, 1124, 82, 1141, texBoss);
+		sprites->Add(2104, 68, 1142, 86, 1174, texBoss);
+
+		sprites->Add(2105, 91, 1124, 107, 1141, texBoss);
+		sprites->Add(2106, 93, 1142, 111, 1174, texBoss);
+
+		sprites->Add(2107, 116, 1124, 132, 1141, texBoss);
+		sprites->Add(2108, 118, 1142, 136, 1174, texBoss);
+
+
+		sprites->Add(2109, 338, 1124, 354, 1141, texBoss);
+		sprites->Add(2110, 334, 1142, 352, 1174, texBoss);
+
+		sprites->Add(2111, 313, 1124, 329, 1141, texBoss);
+		sprites->Add(2112, 309, 1142, 327, 1174, texBoss);
+
+		sprites->Add(2113, 288, 1124, 304, 1141, texBoss);
+		sprites->Add(2114, 284, 1142, 302, 1174, texBoss);
+
+		//
+		sprites->Add(2099, 219, 1124, 235, 1141, texBoss);
+		sprites->Add(2100, 215, 1142, 233, 1174, texBoss);
+		//
+
+		ani = new CAnimation(30);
+		ani->Add(2075);
+		ani->Add(2077);
+		ani->Add(2079);
+		ani->Add(2081);
+		ani->Add(2083);
+		ani->Add(2085);
+		ani->Add(2087);
+		ani->Add(2089);
+		ani->Add(2091);
+		ani->Add(2093);
+		ani->Add(2095);
+		ani->Add(2097);
+		animations->Add(221, ani);
+
+		ani = new CAnimation(300);
+		ani->Add(2079);
+		ani->Add(2080);
+		ani->Add(2081);
+		ani->Add(2082);
+		animations->Add(222, ani);
+
+		ani = new CAnimation(100);
+		ani->Add(2099);
+		animations->Add(223, ani);
+
+		ani = new CAnimation(50);
+		ani->Add(2109);
+		ani->Add(2111);
+		ani->Add(2113);
+		ani->Add(2099);
+		animations->Add(227, ani);
+
+		ani = new CAnimation(100);
+		ani->Add(2100);
+		animations->Add(224, ani);
+
+		ani = new CAnimation(50);
+		ani->Add(2110);
+		ani->Add(2112);
+		ani->Add(2114);
+		ani->Add(2100);
+		animations->Add(228, ani);
+
+		ani = new CAnimation(100);
+		ani->Add(2101);
+		animations->Add(225, ani);
+
+		ani = new CAnimation(50);
+		ani->Add(2103);
+		ani->Add(2105);
+		ani->Add(2107);
+		ani->Add(2101);
+		animations->Add(229, ani);
+
+		ani = new CAnimation(100);
+		ani->Add(2102);
+		animations->Add(226, ani);
+
+		ani = new CAnimation(50);
+		ani->Add(2104);
+		ani->Add(2106);
+		ani->Add(2108);
+		ani->Add(2102);
+		animations->Add(230, ani);
+	}
+	else if (type == 3)
+	{
+		sprites->Add(2115, 35, 238, 59, 262, texEnding);
+
+		ani = new CAnimation(100);
+		ani->Add(2115);
+		animations->Add(231, ani);
+
+		sprites->Add(2116, 463, 227, 479, 242, texEnding);
+		sprites->Add(2117, 480, 227, 496, 242, texEnding);
+		sprites->Add(2118, 497, 227, 513, 242, texEnding);
+
+		ani = new CAnimation(100);
+		ani->Add(2116);
+		ani->Add(2117);
+		ani->Add(2118);
+		animations->Add(232, ani);
+
+		sprites->Add(2119, 463, 243, 479, 259, texEnding);
 	}
 	#pragma endregion Add Texture
 	#pragma region Map
@@ -230,7 +374,7 @@ void WorldMap::SetListItem()
 				{
 					int tilesetIndex = layer->GetTileTilesetIndex(m, n);
 					int tileID = layer->GetTileId(m, n);
-					if (tilesetIndex != -1 && tileID != 406)
+					if (tilesetIndex != -1 && ((tileID != 406 && type==1) || (tileID<100 && type==3) || type==2))
 					{
 						int y = tileID / 11;
 						int x = tileID - y * 11;
@@ -296,9 +440,30 @@ void WorldMap::SetListItem()
 					CTextures::GetInstance()->Get(ID_TEX_TEST));
 				item->Add_Image(id);
 				int input = SCENE_DOOR;
-				if (object->GetId() == 358 || object->GetId()==81) input = SPECIAL_DOOR1;
-				else if (object->GetId() == 369) input = SPECIAL_DOOR2;
+				if (object->GetId() == 358 || object->GetId() == 81) input = SPECIAL_DOOR1;
+				else if (object->GetId() == 369 || object->GetId()==123) input = SPECIAL_DOOR2;
+				else if (object->GetId() == 94) input = BOSS_DOOR;
+				else if (object->GetId() == 371) input = LADDER;
 				item->SetLayer(input);
+				ListMapItem.push_back(item);
+				id++;
+			}
+		}
+
+		//Add trap
+		if (objectGroup->GetName() == "Trap")
+		{
+			for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
+			{
+				Tmx::Object* object = objectGroup->GetObjects().at(j);
+				UnmovingObject* item = new UnmovingObject();
+				item->SetPos(object->GetX(),
+					2032.0f - object->GetY());
+				sprites->Add(id, item->Get_x(), item->Get_y(),
+					item->Get_x() + object->GetWidth(), item->Get_y() + object->GetHeight(),
+					CTextures::GetInstance()->Get(ID_TEX_TEST));
+				item->Add_Image(id);
+				item->SetLayer(TRAP);
 				ListMapItem.push_back(item);
 				id++;
 			}
@@ -474,6 +639,19 @@ void WorldMap::SetListItem()
 					cannon->SetId(idEnemy);
 					cannon->SetLayer(ENEMIES_WITHOUT_TARGET);
 					ListMapItem.push_back(cannon);
+					idEnemy++;
+				}
+			}
+
+			if (objectGroup->GetName() == "Item")
+			{
+				for (size_t j = 0; j < objectGroup->GetNumObjects(); j++)
+				{
+					Tmx::Object* object = objectGroup->GetObjects().at(j);
+					Item* upgrade = new Item();
+					upgrade->SetPos(object->GetX(), 2032.0f - object->GetY());
+					upgrade->Add_Image(ItemHolder::GetInstance()->GenerateItem(UpgradeItem));
+					ListMapItem.push_back(upgrade);
 					idEnemy++;
 				}
 			}
