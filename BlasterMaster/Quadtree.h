@@ -4,13 +4,13 @@
 #include "GameObject.h"
 
 #define MAX_LEVEL 4
-#define MAX_OBJECT_IN_REGION 40
 
 class Quadtree
 {
 private:
 	int level;
 	BoundingBox* region;
+	int max_object;
 	vector<GameObject*>ListObject;
 	/*vector<GameObject*>ListObjectOnCurCam;*/
 	Quadtree** nodes;
@@ -19,7 +19,7 @@ private:
 	void Split();
 
 public:
-	Quadtree(int level, BoundingBox* region);
+	Quadtree(int level, BoundingBox* region,int max_object=40);
 	void Clear();
 	void Insert(GameObject* gobj);
 	void Retrieve(vector<GameObject*> return_ListObject,GameObject* gobj);

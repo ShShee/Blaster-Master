@@ -13,6 +13,7 @@ protected:
 
 	//float lastvx;
 	bool DrawCenter = false;
+	int transparentcy = 255;
 public:
 	 Enemy(float x = 0, float y = 0, float vx=0,float vy=0, float limited_move_x = 0, float limited_move_y = 0,bool DrawCenter=false)
 		:MovingObject(x, y,vx,vy) {
@@ -23,6 +24,7 @@ public:
 	}
 	virtual void Update(DWORD dt,vector<GameObject*> *coOBject);
 	void DropItem();
+	void SetTransparentcy(int tprtc) { this->transparentcy = tprtc; }
 	void Render();
 };
 class CAC_Enemy : public Enemy //Change Animations Constantly
@@ -85,11 +87,14 @@ public:
 	void Update(DWORD dt, vector<GameObject*>* coOBject);
 };
 
-class Enemy_Orb : public CAWA_Enemy
+class Enemy_Orb : public CAC_Enemy
 {
+protected:
+	float prevX;
 public:
 	Enemy_Orb(float x = 0, float y = 0, float vx = 0, float vy = 0, float limited_move_x = 0, float limited_move_y = 0, bool DrawCenter = false)
-		:CAWA_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
+		:CAC_Enemy(x, y, vx, vy, limited_move_x, limited_move_y, DrawCenter) {
+		vx < 0 ? currentAni = 1 : currentAni = 0;
 	}
 	void Update(DWORD dt, vector<GameObject*>* coOBject/*, float x_target, float y_target*/);
 };
@@ -112,5 +117,5 @@ public:
 		tempSpeedY = vy;
 	}
 	void Update(DWORD dt, vector<GameObject*>* coOBject, float x_target, float y_target);
-	void HP_down() { if (designatedFrame == 1) HealthPoint--; }
+	void HP_down(int down=1) { if (designatedFrame == 1) HealthPoint-=down; }
 };

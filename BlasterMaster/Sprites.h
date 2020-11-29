@@ -19,7 +19,7 @@ class CSprite
 public:
 	CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
 
-	void Draw(float x, float y,int DrawCenterType=0,bool flipX=false,int RenderColor=255);
+	void Draw(float x, float y,int DrawCenterType=0,bool flipX=false,int RenderColor=255,int transparentcy=255);
 
 	int GetWidth() {return this->right-this->left; }
 	int GetHeight() { return this->bottom-this->top; }
@@ -70,7 +70,7 @@ class CAnimation
 public:
 	CAnimation(int defaultTime) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
 	void Add(int spriteId, DWORD time = 0);
-	void Render(float x, float y,int designatedFrame=-1,int DrawCenterType=0,bool flipX=false,int RenderColor=255);
+	void Render(float x, float y,int designatedFrame=-1,int DrawCenterType=0,bool flipX=false,int RenderColor=255,int transparentcy=255);
 	void SetCurrentFrame(unsigned int curFrame) { if (curFrame>frames.size()) curFrame = -1; this->currentFrame = curFrame; }
 	int GetFrameSize() { return this->frames.size(); }
 	int GetCurrentFrame() { return this->currentFrame; }

@@ -13,10 +13,12 @@ protected:
 	bool FlagLimit = false;
 	float x_target;
 	float y_target;
+	int damage;
 public:
-	Bullet(float x, float y, float vx, float vy, int type)
+	Bullet(float x, float y, float vx, float vy, int type,int damage)
 		:MovingObject(x, y, vx, vy) {
 		this->type = type;
+		this->damage = damage;
 		SetLimitationByType(this->type);
 	}
 	virtual void Update(DWORD dt, vector<GameObject*>* coObject);
@@ -41,7 +43,7 @@ class HomingMissile : public Bullet
 protected:
 	int IdTarget = 1000;
 public:
-	HomingMissile(float x, float y, float vx, float vy, int type) :Bullet(x, y, vx, vy, type) {}
+	HomingMissile(float x, float y, float vx, float vy, int type,int damage) :Bullet(x, y, vx, vy, type,damage) {}
 	void Update(DWORD dt, vector<GameObject*>* coObject);
 	void LockIdTarget(int id) { this->IdTarget = id; }
 	//void Render();
@@ -51,12 +53,15 @@ class Weapon
 private:
 	vector<Bullet*> BulletCount;
 	vector<int> BulletID;
+	int UpdateLevel=0;
+	int damage=1;
 public:
 	Weapon() {}
 	void Update(DWORD dt, vector <GameObject*>* coObject);
 	void Render();
 
 	void AddBulletId(int id);
+	void UpgradeBulletId(int id);
 	void AddBullet(int WeaponType, int curBullet, float x, float y, float vx, float vy, bool FlipX = false, int type = 0);
 	bool IsAbletoMove() { return true; }
 	bool IsBulletNull() { return !(BulletCount.size() > 0); }
@@ -138,6 +143,12 @@ protected:
 	bool IsJasonBack = true;
 	bool IsBlocked = false;
 	bool FlagAutomatic = false; //use when go through door
+	bool FlagClimbing = false;
+	bool FlagStopUpdate = false;
+	bool FlagDead = false;
+
+	bool ThatTheOne = false;
+	bool FlagBossFight = false;
 
 	float timerCD = 0; //timer cooldown bullet
 	float vtCD; //start cooldown bullet
@@ -154,6 +165,7 @@ public:
 	virtual void SetAni(int ani) = 0;
 	virtual void ResetLife();
 	void Add_BulletImage(int id,int weapontype);
+	void Upgrade_BulletImage(int id);
 	bool LockCam(float x, float y);
 
 	void SetSpeacialWeapon(int spw) { this->curWeapon = spw; }
@@ -163,6 +175,12 @@ public:
 
 	bool GetJasonState() { return IsJasonBack; }
 	int GetCurWeapon() { return this->curWeapon; }
+
+	bool GetFlagBossFight() { return this->FlagBossFight; }
+	void SetFlagBossFight(bool fbf) { this->FlagBossFight = fbf; }
+
+	bool GetFlagDead() { return this->FlagDead; }
+	void SetFlagDead(bool fbf) { this->FlagDead = fbf; }
 };
 
 

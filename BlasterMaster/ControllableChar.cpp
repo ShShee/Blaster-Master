@@ -53,6 +53,14 @@ void Weapon::AddBulletId(int id)
 	BulletID.push_back(id);
 }
 
+void Weapon::UpgradeBulletId(int id)
+{
+	BulletID.pop_back();
+	BulletID.push_back(id);
+	UpdateLevel++;
+	UpdateLevel == 1 ? damage = 3:damage=1;
+}
+
 void Weapon::AddBullet(int WeaponType, int curBullet, float x, float y, float vx, float vy, bool FlipX, int type)
 {
 	float limitationX = 0, limitationY = 0;
@@ -60,7 +68,7 @@ void Weapon::AddBullet(int WeaponType, int curBullet, float x, float y, float vx
 	if (WeaponType == 0)
 	{
 		Bullet* addblt;
-		addblt = new Bullet(x, y, vx, vy, type);
+		addblt = new Bullet(x, y, vx, vy, type,damage);
 		addblt->Add_Image(BulletID[curBullet]);//ani 1
 		if (type >=3) addblt->Add_Image(BulletID[curBullet + 1]);
 		else addblt->Add_Image(BulletID[2]);//ani 2 with normal and 3 with special
@@ -70,7 +78,7 @@ void Weapon::AddBullet(int WeaponType, int curBullet, float x, float y, float vx
 	else if (WeaponType == 1)
 	{
 		Bullet* addblt;
-		addblt = new HomingMissile(x, y, vx, vy, type);
+		addblt = new HomingMissile(x, y, vx, vy, type,damage);
 		addblt->Add_Image(BulletID[curBullet]);//ani 1
 
 		//if (type ==1 || type ==2)
@@ -104,7 +112,7 @@ void Bullet::Update(DWORD dt, vector<GameObject*>* coObject)
 
 			if ((e->nx != 0 || e->ny != 0) && currentAni == 0)
 			{
-				e->obj->HP_down();
+				e->obj->HP_down(damage);
 				FlagCollision = true;
 				Sound::getInstance()->play("hit", false, 1);
 				if (e->obj->GetHP() > 0) e->obj->StartUntouchable();
@@ -137,7 +145,7 @@ void Bullet::SetLimitationByType(int type)
 	else if (type == 0) { limitationX = x + 150.0f; limitationY = y + 0.0f; } // ->
 	else if (type == 1) { limitationX = x - 150.0f; limitationY = y + 0.0f; } // <-
 	else if (type == 2) { limitationX = x + 0.0f; limitationY = y + 150.0f; } // /->
-	else if (type == 5) { limitationX = x + 0.0f; limitationY = y - 150.0f; }// \->
+	else if (type == 5) { limitationX = x + 0.0f; limitationY = y - 180.0f; }// \->
 }
 
 void HomingMissile::Update(DWORD dt, vector<GameObject*>* coObject)
@@ -307,7 +315,7 @@ void ControllableChar::Update(DWORD dt, vector<GameObject*> *coObject)
 
 	for (UINT i = 0; i < coObject->size(); i++)
 	{
-		if (coObject->at(i)->GetLayer()!= SCENE_DOOR)
+		if (coObject->at(i)->GetLayer()== ITEM_LAYER || (coObject->at(i)->GetLayer()>BOSS_DOOR && coObject->at(i)->GetLayer() < LADDER))
 			ForCollision.push_back(coObject->at(i));
 		else ForChangeScene.push_back(coObject->at(i));
 	}
@@ -333,7 +341,6 @@ void ControllableChar::Update(DWORD dt, vector<GameObject*> *coObject)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
 	//Collision logic with enemies
 	for (UINT i = 0; i < coEventsResult.size(); i++)
 	{
@@ -341,26 +348,34 @@ void ControllableChar::Update(DWORD dt, vector<GameObject*> *coObject)
 
 		if (dynamic_cast<Enemy*>(e->obj)) // if e->obj is Enemies
 		{
-			if ((e->nx != 0 || e->ny != 0) && untouchable==0)
+			if ((e->nx != 0 || e->ny != 0) && untouchable == 0)
 			{
-					if (HealthPoint > 0) HealthPoint--;
-					if (HealthPoint == 0) y += 23.0f;
-					StartUntouchable();
-					Sound::getInstance()->play("sophiahit", false, 1);
+				if (HealthPoint > 0) HealthPoint--;
+				if (HealthPoint == 0) y += 23.0f;
+				StartUntouchable();
+				Sound::getInstance()->play("sophiahit", false, 1);
 			}
 		}
 
 		if (dynamic_cast<Item*>(e->obj)) // if e->obj is Items
 		{
+			Item* item = dynamic_cast<Item*>(e->obj);
 			if ((e->nx != 0 || e->ny != 0) && e->obj->GetHP() > 0)
 			{
-				if (HealthPoint < 8) 
-				{ 
-					HealthPoint++; 
+				if (item->GetId() == 50000)
+				{
+					if (HealthPoint < 8)
+					{
+						HealthPoint++;
+					}
+				}
+				if (item->GetId() == 50001)
+				{
+					Upgrade_BulletImage(754);
 				}
 				e->obj->HP_down();
 				Sound::getInstance()->play("itemtaken", false, 1);
-				e->obj->SetDropItemState(PICKED);
+				item->SetDropItemState(PICKED);
 			}
 		}
 	}
@@ -371,15 +386,32 @@ void ControllableChar::Update(DWORD dt, vector<GameObject*> *coObject)
 	if (y < 0) y = 2048;
 	else if (y > 2048) y = 0;
 
-	if(FlagAutomatic==false)
-	for (int i = 0; i < ForChangeScene.size(); i++)
-	{
-		if (ForChangeScene[i]->GetBoundingBox()->IsContainWorld(this->GetBoundingBox()))
+	if (FlagAutomatic == false && FlagBossFight==false)
+		for (int i = 0; i < ForChangeScene.size(); i++)
 		{
-			FlagAutomatic = true;
-			vtCS = 0.5f;
+			if (ForChangeScene[i]->GetLayer() == LADDER)
+			{
+				if (ForChangeScene[i]->GetBoundingBox()->IsContainWorld(this->GetBoundingBox()))
+					FlagClimbing = true;
+				else FlagClimbing = false;
+			}
+			else if (ForChangeScene[i]->GetBoundingBox()->IsContainWorld(this->GetBoundingBox()))
+			{
+				if (ForChangeScene[i]->GetLayer() != TRAP)
+				{
+					FlagAutomatic = true;
+					vtCS = 0.5f;
+					if (ForChangeScene[i]->GetLayer() == BOSS_DOOR) ThatTheOne = true;
+				}
+				else if (untouchable == 0)
+				{
+					if (HealthPoint > 0) HealthPoint--;
+					if (HealthPoint == 0) y += 23.0f;
+					StartUntouchable();
+					Sound::getInstance()->play("sophiahit", false, 1);
+				}
+			}
 		}
-	}
 	else
 	{
 		if (timerCS > timeCSlimit)
@@ -387,6 +419,11 @@ void ControllableChar::Update(DWORD dt, vector<GameObject*> *coObject)
 			FlagAutomatic = false;
 			timerCS = 0;
 			vtCS = 0;
+			if (ThatTheOne == true)
+			{
+				FlagBossFight = true;
+				ThatTheOne = false;
+			}
 		}
 	}
 }
@@ -415,6 +452,10 @@ void ControllableChar::Add_BulletImage(int id,int weapontype)
 	WeaponType[weapontype]->AddBulletId(id);
 }
 
+void ControllableChar::Upgrade_BulletImage(int id)
+{
+	WeaponType[0]->UpgradeBulletId(id);
+}
 
 
 bool ControllableChar::LockCam(float x, float y)

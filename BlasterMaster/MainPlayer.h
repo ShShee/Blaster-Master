@@ -25,6 +25,8 @@ public:
 	void SetReleaseKey(int Reaction) { if(Reaction !=-1) Player[0]->SetReleaseKey(Reaction); }
 	void SetItemSize(int is) { this->ItemSize = is; }
 	void SetSpecialWeapon(int spw) { Player[curPlayer]->SetSpeacialWeapon(spw); }
+	void SetFlagBosFight(bool fbf) { Player[curPlayer]->SetFlagBossFight(fbf); }\
+	void SetFlagDead(bool fd) { Player[curPlayer]->SetFlagDead(fd); }
 
 	bool GetFallingState() { return Player[curPlayer]->IsFallingDown(); }
 	GameObject* Get_CurPlayerInfo() { return Player[curPlayer]; }
@@ -35,6 +37,8 @@ public:
 	float Get_Player_X(int player) { return Player[player]->Get_x(); }
 	float Get_Player_Y(int player) { return Player[player]->Get_y(); }
 	int GetCurWeapon() { return Player[curPlayer]->GetCurWeapon(); }
+	bool GetBossFight() { return Player[curPlayer]->GetFlagBossFight(); }
+	bool GetFlagDead() { return Player[curPlayer]->GetFlagDead(); }
 	BoundingBox* GetBB(int player) { return Player[player]->GetBoundingBox(); }
 	static MainPlayer* GetInstance();
 };

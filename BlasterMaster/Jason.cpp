@@ -3,10 +3,11 @@
 void Jason::Update(DWORD dt, vector<GameObject*>* coObject)
 {
 	ControllableChar::Update(dt, coObject);
-	vy -= 0.03f;
-	//vx += 0.001f;
-	//if(x<25.0f)
-	//SetAni(GO_RIGHT);
+	if(FlagClimbing==false || (FlagClimbing==true && *status!=NOTHING)) vy -= 0.03f;\
+
+	lastX = x;
+	((lastY < y || lastY - 30.0f>y) && LockCam(lastX, lastY) == false) ? lastY = y : lastY = lastY;
+	CGame::GetInstance()->SetCamPos(lastX - 150.0f, lastY + 150.0f);
 }
 
 void Jason::Render()
@@ -47,14 +48,28 @@ void Jason::SetAni(int ani)
 			if (lastAni == 4) ani = 0; else ani = 1;
 			y += 10.0f;
 		}
+		else if (FlagClimbing == true && *status==NOTHING)
+		{
+			ani = 6;
+			vy = 0.04f;
+			designatedFrame = -1;
+			FlagClimbing = false;
+		}
 		else ani = -1;
 		break;
 	case GO_DOWN:
-		if (*status == NOTHING)
+		if (*status == NOTHING && FlagClimbing==false)
 		{
 			*status = LYING;
 			if (lastAni == 0) ani = 4; else ani = 5;
 			y -= 5.0f;
+		}
+		else if (FlagClimbing == true && *status == NOTHING)
+		{
+			ani = 6;
+			vy = -0.04f;
+			designatedFrame = -1;
+			FlagClimbing = false;
 		}
 		else ani = -1;
 		break;
@@ -89,12 +104,11 @@ void Jason::SetAni(int ani)
 		break;
 	case IDLE:
 		vx = 0;
-		/*if(*status!=JUMPING) vy = 0;*/
 		if (IsFalling == true) designatedFrame = 2;
 		if (lastAni == 2 && *status == NOTHING) ani = 0;
 		else if (lastAni == 3 && *status == NOTHING) ani = 1;
-		//ani = 2;
-		y += 0.5f;
+		if (FlagClimbing == true && *status==NOTHING) ani = 6;
+		if (lastAni != 6) y += 0.5f; else vy = 0;
 		break;
 	}
 	if (ani != lastAni && ani >= 0)

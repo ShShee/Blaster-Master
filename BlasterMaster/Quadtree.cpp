@@ -1,9 +1,10 @@
 #include "Quadtree.h"
 
-Quadtree::Quadtree(int level, BoundingBox* region)
+Quadtree::Quadtree(int level, BoundingBox* region,int max_object)
 {
     this->level = level;
     this->region = region;
+    this->max_object = max_object;
 }
 
 bool Quadtree::IsContain(BoundingBox* bx)
@@ -74,7 +75,7 @@ void Quadtree::Insert(GameObject* gobj)
 
     if (this->IsContain(bx))   ListObject.push_back(gobj);
 
-    if (ListObject.size() > MAX_OBJECT_IN_REGION && level < MAX_LEVEL)
+    if (ListObject.size() > max_object && level < MAX_LEVEL)
     {
         Split();
         

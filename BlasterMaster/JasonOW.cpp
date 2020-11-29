@@ -2,16 +2,19 @@
 
 void JasonOW::ResetLife()
 {
-	this->SetPos(120.0f, 120.0f);
+	if(FlagBossFight==false) this->SetPos(120.0f, 120.0f);
 	ControllableChar::ResetLife();
 }
 
 void JasonOW::Update(DWORD dt, vector<GameObject*>* coObject)
 {
 	ControllableChar::Update(dt, coObject);
-	lastX = x;
-	lastY = y;
-	CGame::GetInstance()->SetCamPos(lastX - 150.0f, lastY + 150.0f);
+	if (FlagBossFight == false)
+	{
+		lastX = x;
+		lastY = y;
+		CGame::GetInstance()->SetCamPos(lastX - 150.0f, lastY + 150.0f);
+	}
 }
 
 void JasonOW::Render()
@@ -32,10 +35,10 @@ void JasonOW::Render()
 	else
 	{
 		if(currentAni!=4)	currentAni = lastAni = 4;
-		//y += 20.0f;
 		animations[currentAni]->Render(x, y, -1, true, false, 255);
 		if (animations[currentAni]->GetCurrentFrame() == 4)
 		{
+			FlagDead = true;
 			ResetLife();
 		}
 		//ResetLife();

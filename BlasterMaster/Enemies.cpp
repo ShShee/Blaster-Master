@@ -40,7 +40,7 @@ void Enemy::Render()
 	if (HealthPoint > 0)
 	{
 		//RenderBoundingBox();
-		animations[currentAni]->Render(x, y, designatedFrame, DrawCenter,false,RenderColor);
+		animations[currentAni]->Render(x, y, designatedFrame, DrawCenter,false,RenderColor,transparentcy);
 	}
 }
 
@@ -143,16 +143,15 @@ void Enemy_Insect::Update(DWORD dt, vector<GameObject*>* coOBject)
 void Enemy_Orb::Update(DWORD dt, vector<GameObject*>* coOBject/*,float x_target,float y_target*/)
 {
 		Enemy::Update(dt, coOBject);
-		if (nx==0)
-			designatedFrame = 0;
-		else if (nx!=0)
+		if (nx!=0)
 		{
-			designatedFrame = -1;
-			if (animations[currentAni]->GetCurrentFrame() == 3)
-			{
-				vx = -vx;
-				if (vx < 0) currentAni = 1; else currentAni = 0;
-			}
+			prevX = vx;
+			vx = 0;
+		}
+		if (vx==0)
+		{
+			vx = -prevX;
+			vx < 0?currentAni = 1:currentAni = 0;		
 		}
 }
 

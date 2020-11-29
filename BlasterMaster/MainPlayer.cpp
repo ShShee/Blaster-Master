@@ -368,6 +368,10 @@ void MainPlayer::LoadTexture()
 	sprites->Add(1005, 3, 47, 18, 54, texJason);
 	sprites->Add(1006, 21, 47, 36, 54, texJason);
 
+	//climbing
+	sprites->Add(1007, 40, 47, 50, 63, texJason);
+	sprites->Add(1008, 57, 47, 67, 63, texJason);
+
 	//idle
 	ani = new CAnimation(300);
 	ani->Add(1001);
@@ -386,11 +390,18 @@ void MainPlayer::LoadTexture()
 	ani->Add(1006);
 	animations->Add(502, ani);
 
+	//climbing
+	ani = new CAnimation(60);
+	ani->Add(1007);
+	ani->Add(1008);
+	animations->Add(503, ani);
+
 	for (int i = 500; i < 503; i++)
 	{
 		Player[1]->Add_Image(i);
 		Player[1]->Add_Image(i);
 	}
+	Player[1]->Add_Image(503);
 
 	sprites->Add(1250, 75, 40, 79, 44, texJason);
 	ani = new CAnimation(100);

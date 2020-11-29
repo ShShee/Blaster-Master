@@ -8,7 +8,7 @@
 #define MAIN_WINDOW_TITLE L"02 - Sprite animation"
 
 //#define BACKGROUND_COLOR D3DCOLOR_XRGB(69,255,69)
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(255,255,200)
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(0,0,0)
 
 #define MAX_FRAME_RATE 60
 
@@ -41,11 +41,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 */
 void LoadResources()
 {
-	Sound::getInstance()->loadSound("SpritesSource/Soundtrack/jump.wav", "jump");
-	Sound::getInstance()->loadSound("SpritesSource/Soundtrack/sophiahit.wav", "sophiahit");
-	Sound::getInstance()->loadSound("SpritesSource/Soundtrack/fire.wav", "fire");
-	Sound::getInstance()->loadSound("SpritesSource/Soundtrack/hit.wav", "hit");
-	Sound::getInstance()->loadSound("SpritesSource/Soundtrack/itemtaken.wav", "itemtaken");
 	sm->LoadContent();
 }
 

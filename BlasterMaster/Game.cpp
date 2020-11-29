@@ -112,7 +112,7 @@ void CGame::Init(HWND hWnd)
 /*
 	Utility function to wrap LPD3DXSPRITE::Draw
 */
-void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom,int DrawCenterType,bool FlipHorizontal,int RenderColor)
+void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom,int DrawCenterType,bool FlipHorizontal,int RenderColor,int transparentcy)
 {
 	RECT r;
 	r.left = left;
@@ -141,16 +141,17 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 		D3DXMatrixTransformation2D(&transform, &ScalingCenter, 0, &Scale, &RotationCenter, 0, &Translation);
 		spriteHandler->SetTransform(&transform);
 	}
-	DrawCenterType == 0 ? spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_XRGB(255, RenderColor, RenderColor)) : spriteHandler->Draw(texture, &r, &center, &p, D3DCOLOR_XRGB(255, RenderColor, RenderColor));
+	DrawCenterType == 0 ? spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(transparentcy,255, RenderColor, RenderColor)) 
+		: spriteHandler->Draw(texture, &r, &center, &p, D3DCOLOR_ARGB(transparentcy,255, RenderColor, RenderColor));
 	spriteHandler->SetTransform(&oldMatrix);
 }
 
 void CGame::DrawHealthbars(LPDIRECT3DTEXTURE9 texture,int Value)
 {
 	int HealthHeight= 0, HHeight = 0;
-	Draw(cam.get_x() + 13.0f, 2032.0f - cam.get_y() - 50.0f, texture, 55, 1, 69, 34, false, false, 255);
-	Draw(cam.get_x() + 13.0f, 2032.0f - cam.get_y() - 205.5f, texture, 55, 35, 69, 68, false, false, 255);
-	Draw(cam.get_x() + 12.0f, 2032.0f - cam.get_y() - 125.0f, texture, 17, 0, 33, 80, false, false, 255);
+	Draw(cam.get_x() + 13.0f, 2032.0f - cam.get_y() - 50.0f, texture, 55, 1, 69, 34, false, false, 255,255);
+	Draw(cam.get_x() + 13.0f, 2032.0f - cam.get_y() - 205.5f, texture, 55, 35, 69, 68, false, false, 255,255);
+	Draw(cam.get_x() + 12.0f, 2032.0f - cam.get_y() - 125.0f, texture, 17, 0, 33, 80, false, false, 255,255);
 	for (int i = 8; i > 0; i--)
 	{
 		if (Value == i)
@@ -159,8 +160,8 @@ void CGame::DrawHealthbars(LPDIRECT3DTEXTURE9 texture,int Value)
 			HHeight = i * 10;
 		}
 	}
-	if(HHeight!=0) Draw(cam.get_x() + 12.0f, HealthHeight, texture, 34, 0, 50, HHeight, false, false, 255);
-	Draw(cam.get_x() + 12.0f, 2032.0f- cam.get_y() - 125.0f, texture, 0, 0, 16, 80, false, false, 255);
+	if(HHeight!=0) Draw(cam.get_x() + 12.0f, HealthHeight, texture, 34, 0, 50, HHeight, false, false, 255,255);
+	Draw(cam.get_x() + 12.0f, 2032.0f- cam.get_y() - 125.0f, texture, 0, 0, 16, 80, false, false, 255,255);
 }
 
 int CGame::IsKeyDown(int KeyCode)

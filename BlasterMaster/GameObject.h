@@ -16,9 +16,12 @@
 #define SPECIAL_DOOR1 4
 #define SPECIAL_DOOR2 5
 #define SCENE_DOOR 6
-#define OBJECT_GROUP 7
-#define ENEMIES_WITH_TARGET 8
-#define ENEMIES_WITHOUT_TARGET 9
+#define BOSS_DOOR 7
+#define OBJECT_GROUP 8
+#define ENEMIES_WITH_TARGET 9
+#define ENEMIES_WITHOUT_TARGET 10
+#define LADDER 11
+#define TRAP 12
 
 //drop state
 #define HVNT_DROP_YET 0
@@ -36,7 +39,8 @@ enum REACTION
 	JUMP,
 	FIRE,
 	GET_OUT,
-	GET_IN
+	GET_IN,
+	CHANGE
 };
 
 enum STATE
@@ -134,8 +138,8 @@ public:
 	float Get_vx() { return vx; }
 	float Get_vy() { return vy; }
 	virtual bool IsAbletoMove() = 0;
-	void HP_up() { HealthPoint ++; }
-	virtual void HP_down() { HealthPoint --; }
+	void HP_up(int up=1) { HealthPoint+=up; }
+	virtual void HP_down(int down=1) { HealthPoint-=down; }
 	int GetHP() { return HealthPoint; }
 	void SetLayer(int layer) { this->layer = layer; }
 	int GetLayer() { return this->layer; }
@@ -145,6 +149,7 @@ public:
 	int GetIdItemDroppped() { return this->IdItemDropped; }
 	void SetId(int ID) { this->id = ID; }
 	int GetId() { return this ->id; }
+	void SetRenderColor(int rclr) { this->RenderColor = rclr; }
 	~GameObject() {}
 };
 
@@ -153,7 +158,7 @@ class MovingObject : public GameObject
 protected:
 
 	int currentAni=0; //
-	int designatedFrame;
+	int designatedFrame=-1;
 	vector<LPANIMATION> animations; //sprites of object
 
 public:
@@ -191,7 +196,7 @@ public:
 
 			LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(ID_TEX_TEST);
 
-			CGame::GetInstance()->Draw(x, y, bbox, rect->x, rect->y, rect->x + rect->width, rect->y + rect->height, false, false,255);
+			CGame::GetInstance()->Draw(x, y, bbox, rect->x, rect->y, rect->x + rect->width, rect->y + rect->height, false, false,255,255);
 		}
 	};
 

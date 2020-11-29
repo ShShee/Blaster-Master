@@ -1,5 +1,7 @@
 #include "MainAreaScene.h"
 
+#pragma region Processing Function
+//Change from Sophia to Jason and backward
 void MainAreaScene::SwitchPlayer()
 {
 	if (ReadyPlayer1->Get_CurPlayer() == 0 && ReadyPlayer1->GetFallingState() == false)
@@ -19,6 +21,7 @@ void MainAreaScene::SwitchPlayer()
 	}
 }
 
+//Check flag change to init next scene
 bool MainAreaScene::ChangeSceneorNot()
 {
 	int curPlayer = ReadyPlayer1->Get_CurPlayer();
@@ -35,6 +38,7 @@ bool MainAreaScene::ChangeSceneorNot()
 	}
 	return false;
 }
+#pragma endregion
 
 MainAreaScene::MainAreaScene()
 {
@@ -55,25 +59,30 @@ void MainAreaScene::Update(DWORD dt)
 	coObjects.clear();
 	DoorLocation.clear();
 
+	//Get objects on cam
 	quadtree->GetListObjectinCamera(ListObject,
 		new BoundingBox(CGame::GetInstance()->Get_CamX(), 2032 - CGame::GetInstance()->Get_CamY() > SCREEN_HEIGHT ? (2032 - CGame::GetInstance()->Get_CamY()) - SCREEN_HEIGHT : 0,
 			SCREEN_WIDTH+50.0f, SCREEN_HEIGHT+50.0f));
+
+	//Classify objects and items
 	for (int i = 0; i < ListObject.size(); i++)
 	{
 		if ((ListObject[i]->GetLayer() >= SCENE_DOOR) && ListObject[i]->GetHP() > 0)
 			coObjects.push_back(ListObject[i]);
 		else if (ListObject[i]->GetLayer() == SPECIAL_DOOR1 || ListObject[i]->GetLayer() == SPECIAL_DOOR2)
 			DoorLocation.push_back(ListObject[i]);
-		if (ListObject[i]->GetHP() <= 0)
+		if (ListObject[i]->GetHP() <= 0)//Drop items
 		{
 			if (ListObject[i]->GetDropItemState() == HVNT_DROP_YET) ListObject[i]->DropItem();
 			else if (ListObject[i]->GetDropItemState() == DROPPED)
 			{
 				GameObject* temp = ItemHolder::GetInstance()->GetDroppedItem(ListObject[i]->GetIdItemDroppped());
-				if (temp->GetDropItemState() == HVNT_DROP_YET) Items.push_back(temp);
+				if (temp->GetDropItemState() == HVNT_DROP_YET) Items.push_back(temp); //HVNT_DROP_YET because items will be created with this state first
 			}
 		}
 	}
+
+	//Add main player from collision list to update enemies
 	coObjects.push_back(ReadyPlayer1->Get_CurPlayerInfo());
 	for (int i = 0; i < coObjects.size(); i++)
 	{
@@ -84,12 +93,16 @@ void MainAreaScene::Update(DWORD dt)
 			coObjects[i]->Update(dt, &coObjects);
 	}
 	coObjects.pop_back();
+
+	//Add items for colliding 
 	for (GameObject* umobj : Items)
 	{
 		coObjects.push_back(umobj);
 		ListObject.push_back(umobj);
 	}
 	ReadyPlayer1->SetItemSize(Items.size());
+	 
+	//Process key + weapon + pos + change main + change scene
 	ReadyPlayer1->SetReleaseKey(keyHandler->GetReleasedState());
 	ReadyPlayer1->SetSpecialWeapon(keyHandler->GetSpecialWeapon());
 	if (keyHandler->GetFlagPos() == true)
@@ -107,6 +120,7 @@ void MainAreaScene::Update(DWORD dt)
 		keyHandler->SetFlagScene(false);
 	}
 	ReadyPlayer1->SetAni(keyHandler->GetState());
+
 	ReadyPlayer1->Update(dt, coObjects);
 	//ReadyPlayer1->Update(dt, Items);
 	//for (GameObject* gobj : ListObject)
@@ -118,9 +132,6 @@ void MainAreaScene::Update(DWORD dt)
 
 void MainAreaScene::LoadContent()
 {
-	CTextures* textures = CTextures::GetInstance();
-	//Sound::getInstance()->loadSound("SpritesSource/area2.wav", "area2");
-	//Sound::getInstance()->play("area2", true, 0);
 	ItemHolder::GetInstance()->LoadItemList();
 	ReadyPlayer1->LoadTexture();
 	wm->LoadMap("SpritesSource\\area2map.tmx");
@@ -154,6 +165,14 @@ void MainAreaScene::Render()
 	SaveForTheLast.clear();
 }
 
+bool MainAreaScene::HasBeenDeadYet()
+{
+	bool temp = ReadyPlayer1->GetFlagDead();
+	ReadyPlayer1->SetFlagDead(false);
+    return temp;
+}
+
+#pragma region KeyEvent
 void MainAreaKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game=CGame::GetInstance();
@@ -161,6 +180,10 @@ void MainAreaKeyHandler::KeyState(BYTE* states)
 		SetState(GO_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		SetState(GO_LEFT);
+	else if (game->IsKeyDown(DIK_UP))
+		SetState(GO_UP);
+	else if (game->IsKeyDown(DIK_DOWN))
+		SetState(GO_DOWN);
 	else SetState(IDLE);
 }
 
@@ -171,9 +194,6 @@ void MainAreaKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_X:
 		Sound::getInstance()->play("jump", false, 1);
 		SetState(JUMP);		
-		break;
-	case DIK_UP:
-		SetState(GO_UP);
 		break;
 	case DIK_Z:
 		Sound::getInstance()->play("fire", false, 1);
@@ -186,9 +206,13 @@ void MainAreaKeyHandler::OnKeyDown(int KeyCode)
 		SetFlagPos();
 		SetPos(D3DXVECTOR2(/*1050.0f+*/940.0f, 638.0f));
 		break;
-	case DIK_2:
+	case DIK_3:
 		SetFlagPos();
 		SetPos(D3DXVECTOR2(1200.0f, 1400.0f));
+		break;
+	case DIK_2:
+		SetFlagPos();
+		SetPos(D3DXVECTOR2(570.0f, 1570.0f));
 		break;
 	case DIK_LSHIFT:
 		SetSwitch();
@@ -208,3 +232,4 @@ void MainAreaKeyHandler::OnKeyUp(int KeyCode)
 		break;
 	}
 }
+#pragma endregion

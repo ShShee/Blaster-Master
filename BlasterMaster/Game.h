@@ -34,7 +34,7 @@ class CGame
 public:
 	void InitKeyBoard(LPKEYEVENTHANDLER handler);
 	void Init(HWND hWnd);
-	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom,int DrawCenterType,bool FlipHorizontal,int RenderColor);
+	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom,int DrawCenterType,bool FlipHorizontal,int RenderColor,int transparentcy);
 	void DrawHealthbars(LPDIRECT3DTEXTURE9 texture,int Value);
 	int IsKeyDown(int KeyCode);
 	void ProcessKeyboard();

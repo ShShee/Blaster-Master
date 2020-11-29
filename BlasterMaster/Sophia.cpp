@@ -52,10 +52,12 @@ void Sophia::Update(DWORD dt, vector<GameObject*>* coObject)
 		if (HasBeenUp == 0) vy -= Hoverlv;
 	}
 	//set cam pos
-	int result;
-	lastX = x;
-	((lastY < y || lastY - 80.0f>y) && LockCam(lastX, lastY) == false) ? lastY = y : lastY = lastY;
-	CGame::GetInstance()->SetCamPos(lastX - 150.0f, lastY + 150.0f);
+	if(FlagStopUpdate == false)
+	{
+		lastX = x;
+		((lastY < y || lastY - 80.0f>y) && LockCam(lastX, lastY) == false) ? lastY = y : lastY = lastY;
+		CGame::GetInstance()->SetCamPos(lastX - 150.0f, lastY + 150.0f);
+	}
 }
 
 void Sophia::Render()
@@ -139,6 +141,7 @@ void Sophia::Render()
 	}
 	else
 	{
+		Sound::getInstance()->play("explode", false, 1);
 		if(currentAni!=40)
 		currentAni = lastAni = 40;
 		//y += 20.0f;
@@ -146,6 +149,7 @@ void Sophia::Render()
 		if (animations[currentAni]->GetCurrentFrame() == 1)
 		{
 			y += 1.0f;
+			FlagDead = true;
 			ResetLife();
 		}
 	}
@@ -270,6 +274,7 @@ void Sophia::SetAni(int ani)
 			*status = NOTHING;
 			if (lastAni == 0 || (lastAni > 17 && lastAni < 22) || lastAni == 34) ani = 36;
 			else ani = 37;
+			FlagStopUpdate = true;
 			y += 8.5f;
 			vx = 0; vy = 0;
 			break;
@@ -277,6 +282,7 @@ void Sophia::SetAni(int ani)
 			IsJasonOut = false;
 			timerOH = 300.0f;
 			vtOH = -0.5f;
+			FlagStopUpdate = false;
 			y += 11.0f;
 			if (lastAni == 37) ani = 37;
 			else if (lastAni == 36) ani = 36;

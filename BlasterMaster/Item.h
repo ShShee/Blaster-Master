@@ -3,7 +3,9 @@
 #include <time.h>
 
 #define PowerItem 0
+#define UpgradeItem 1
 #define Bomber_Bullet 49999
+#define Boss_Bullet 49998
 class Item : public UnmovingObject
 {
 protected:

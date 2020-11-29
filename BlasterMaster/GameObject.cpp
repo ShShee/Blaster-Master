@@ -48,15 +48,8 @@ void MovingObject::RenderBoundingBox()
 
 	LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(ID_TEX_TEST);
 
-	CGame::GetInstance()->Draw(x, y, bbox, rect->x,rect->y,rect->x+rect->width,rect->y+rect->height, false,false,255);
+	CGame::GetInstance()->Draw(x, y, bbox, rect->x,rect->y,rect->x+rect->width,rect->y+rect->height, false,false,255,255);
 }
-
-//void MovingObject::Update(DWORD dt)
-//{
-//	GameObject::Update(dt);
-//	this->x += vx * dt;
-//	this->y += vy * dt;
-//}
 
 BoundingBox* MovingObject::GetBoundingBox()
 {
@@ -74,7 +67,8 @@ void UnmovingObject::Add_Image(int ID)
 void UnmovingObject::Render()
 {
 	//RenderBoundingBox();
-	tile->Draw(x, y);
+	if(HealthPoint>0)
+	tile->Draw(x, y,0,false,RenderColor,255);
 }
 
 BoundingBox* UnmovingObject::GetBoundingBox()
