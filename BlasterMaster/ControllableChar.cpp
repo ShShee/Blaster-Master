@@ -362,16 +362,20 @@ void ControllableChar::Update(DWORD dt, vector<GameObject*> *coObject)
 			Item* item = dynamic_cast<Item*>(e->obj);
 			if ((e->nx != 0 || e->ny != 0) && e->obj->GetHP() > 0)
 			{
-				if (item->GetId() == 50000)
+				if (item->GetId() == PowerSprite)
 				{
 					if (HealthPoint < 8)
 					{
 						HealthPoint++;
 					}
 				}
-				if (item->GetId() == 50001)
+				else if (item->GetId() == UpgradeSprite)
 				{
 					Upgrade_BulletImage(754);
+				}
+				else if (item->GetId() == FullHpSprite)
+				{
+					HealthPoint = 8;
 				}
 				e->obj->HP_down();
 				Sound::getInstance()->play("itemtaken", false, 1);
