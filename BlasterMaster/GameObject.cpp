@@ -41,6 +41,13 @@ void MovingObject::Add_Image(int ID)
 	animations.push_back(ani);
 }
 
+void MovingObject::Update(DWORD dt)
+{
+	GameObject::Update(dt);
+	x += dx;
+	y += dy;
+}
+
 void MovingObject::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);

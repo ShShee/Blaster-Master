@@ -22,7 +22,6 @@ void Sophia::Update(DWORD dt, vector<GameObject*>* coObject)
 			{
 				y += 12.0f;
 				HasBeenUp = 0;
-
 			}
 		}
 
@@ -292,7 +291,8 @@ void Sophia::SetAni(int ani)
 			{
 				ani = -1;
 				if (lastAni > 25 && lastAni < 34) designatedFrame = -1;
-				if (IsFalling == true) {
+				if (IsFalling == true) 
+				{
 					if (lastAni == 0)
 					{
 						ani = lastFrame + 10;
@@ -310,6 +310,7 @@ void Sophia::SetAni(int ani)
 				}
 				else vx = 0;
 			}
+			break;
 			/*if(*status==LOOKUP)*/ //y += 0.5f;
 		}
 		if (ani != lastAni && ani >= 0)

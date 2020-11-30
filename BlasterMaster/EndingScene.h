@@ -11,10 +11,11 @@ public:
 class EndingScene: public Scene
 {
 private:
+	bool FlagTheEnd = false;
 	float location=0;
 	float lag = 1986.0f;
-	Enemy* SmallDetails;
-	UnmovingObject* frog;
+	MovingObject* SmallDetails;
+	MovingObject* frog;
 	WorldMap* wm;
 	Quadtree* quadtree;
 	vector<GameObject*> ListObject;

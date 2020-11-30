@@ -165,7 +165,8 @@ public:
 	MovingObject(float x = 0, float y = 0,float vx=0,float vy=0) 
 		:GameObject(x, y) { this->vx= vx;this->vy= vy; }
 	void Add_Image(int ID);
-	virtual void Render() {}
+	virtual void Update(DWORD dt);
+	virtual void Render() { if(HealthPoint>0) animations[currentAni]->Render(x,y); }
 	void RenderBoundingBox();
 
 	void SetSpeed(float vx, float vy) { this->vx = vx; this->vy = vy; }

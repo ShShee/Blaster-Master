@@ -120,7 +120,6 @@ void MainAreaScene::Update(DWORD dt)
 		keyHandler->SetFlagScene(false);
 	}
 	ReadyPlayer1->SetAni(keyHandler->GetState());
-
 	ReadyPlayer1->Update(dt, coObjects);
 	//ReadyPlayer1->Update(dt, Items);
 	//for (GameObject* gobj : ListObject)
@@ -181,7 +180,10 @@ void MainAreaKeyHandler::KeyState(BYTE* states)
 	else if (game->IsKeyDown(DIK_LEFT))
 		SetState(GO_LEFT);
 	else if (game->IsKeyDown(DIK_UP))
-		SetState(GO_UP);
+	{
+		if (GetState() ==GO_LEFT || GetState() == GO_RIGHT) SetState(IDLE);
+		else SetState(GO_UP);
+	}
 	else if (game->IsKeyDown(DIK_DOWN))
 		SetState(GO_DOWN);
 	else SetState(IDLE);
@@ -191,6 +193,9 @@ void MainAreaKeyHandler::OnKeyDown(int KeyCode)
 {
 	switch (KeyCode)
 	{
+	//case DIK_UP:
+	//	SetState(GO_UP);
+	//	break;
 	case DIK_X:
 		Sound::getInstance()->play("jump", false, 1);
 		SetState(JUMP);		

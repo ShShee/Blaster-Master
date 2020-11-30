@@ -356,7 +356,22 @@ void WorldMap::SetListItem()
 		ani->Add(2118);
 		animations->Add(232, ani);
 
+		sprites->Add(2120, 525, 186, 625, 486, texEnding);
+
+		sprites->Add(2121, 640, 258, 789, 407, texEnding);
+		ani = new CAnimation(100);
+		ani->Add(2121);
+		animations->Add(233, ani);
+
 		sprites->Add(2119, 463, 243, 479, 259, texEnding);
+
+		ani = new CAnimation(100);
+		ani->Add(2119);
+		animations->Add(234, ani);
+
+		ani = new CAnimation(100);
+		ani->Add(2120);
+		animations->Add(235, ani);
 	}
 	#pragma endregion Add Texture
 	#pragma region Map
@@ -650,7 +665,7 @@ void WorldMap::SetListItem()
 					Tmx::Object* object = objectGroup->GetObjects().at(j);
 					Item* upgrade = new Item();
 					upgrade->SetPos(object->GetX(), 2032.0f - object->GetY());
-					upgrade->Add_Image(ItemHolder::GetInstance()->GenerateItem(UpgradeItem));
+					object->GetId()==141?upgrade->Add_Image(ItemHolder::GetInstance()->GenerateItem(UpgradeItem)): upgrade->Add_Image(ItemHolder::GetInstance()->GenerateItem(FullHpItem));
 					ListMapItem.push_back(upgrade);
 					idEnemy++;
 				}

@@ -111,9 +111,6 @@ void SceneManager::Update(DWORD dt)
         Sound::getInstance()->play("stage1", true, 0);
         Sound::getInstance()->stop("runin");
         break;
-    //case 0:
-    //    Sound::getInstance()->play("stage1", true, 0);
-    //    break;
     }
 }
 

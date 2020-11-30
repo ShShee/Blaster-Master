@@ -8,21 +8,37 @@ void ItemHolder::LoadItemList()
 	texItem = CTextures::GetInstance()->Get(ID_TEX_ITEM);
 
 	CSprites* sprites = CSprites::GetInstance();
+	CAnimations* animations = CAnimations::GetInstance();
+	LPANIMATION ani;
 	Item* addItem;
-	sprites->Add(50000,255,109,271,125,texItem);
+	sprites->Add(PowerSprite,255,109,271,125,texItem);
 	addItem= new Item();
-	addItem->Add_Image(50000);
+	ani = new CAnimation(100);
+	ani->Add(PowerSprite);
+	animations->Add(PowerSprite, ani);
+	addItem->Add_Image(PowerSprite);
 	ItemList.push_back(addItem);
 
-	sprites->Add(50001, 5, 59, 21, 75, texItem);
+	sprites->Add(UpgradeSprite, 5, 59, 21, 75, texItem);
 	addItem = new Item();
-	addItem->Add_Image(50001);
+	ani = new CAnimation(100);
+	ani->Add(UpgradeSprite);
+	animations->Add(UpgradeSprite, ani);
+	addItem->Add_Image(UpgradeSprite);
+	ItemList.push_back(addItem);
+
+	sprites->Add(FullHpSprite, 255, 133, 271, 149, texItem);
+	addItem = new Item();
+	ani = new CAnimation(200);
+	ani->Add(PowerSprite);
+	ani->Add(FullHpSprite);
+	animations->Add(FullHpSprite, ani);
+	addItem->Add_Image(FullHpSprite);
 	ItemList.push_back(addItem);
 
 	sprites->Add(Bomber_Bullet, 258, 12, 268, 22,texItem);
 	sprites->Add(Boss_Bullet, 58, 62, 67, 71, texItem);
-	CAnimations* animations = CAnimations::GetInstance();
-	LPANIMATION ani;
+
 	ani = new CAnimation(300);
 	ani->Add(Bomber_Bullet);
 	animations->Add(Bomber_Bullet, ani);
@@ -52,7 +68,7 @@ int ItemHolder::GenerateItem(int Class)
 			return ItemList[PowerItem]->GetId();
 		}
 	}
-	if (Class == 1) return ItemList[UpgradeItem]->GetId();
+	if (Class == UpgradeItem || Class==FullHpItem) return ItemList[Class]->GetId();
 	return -1;
 }
 

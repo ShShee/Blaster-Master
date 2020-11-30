@@ -4,15 +4,19 @@
 
 #define PowerItem 0
 #define UpgradeItem 1
+#define FullHpItem 2
+#define PowerSprite 50000
+#define UpgradeSprite 50001
+#define FullHpSprite 50002
 #define Bomber_Bullet 49999
 #define Boss_Bullet 49998
-class Item : public UnmovingObject
+class Item : public MovingObject
 {
 protected:
 	int idSprite;
 public:
-	Item() :UnmovingObject() { this->layer = ITEM_LAYER; }
-	void Add_Image(int ID) { UnmovingObject::Add_Image(ID); this->idSprite = ID; }
+	Item() :MovingObject() { this->layer = ITEM_LAYER; }
+	void Add_Image(int ID) { MovingObject::Add_Image(ID); this->idSprite = ID; }
 	int GetId() { return this->idSprite; }
 	//void Render() { if (DropItemState != PICKED) UnmovingObject::Render(); }
 };

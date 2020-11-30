@@ -6,6 +6,7 @@ class KeyEventHandler
 {
 protected:
 	int State=-1;
+	int Action = -1;
 	int ReleasedKeyState;
 	int SpecialWeapon=0;
 	bool Switch = false;
@@ -20,6 +21,9 @@ public:
 
 	void SetState(int st) { this->State = st; }
 	int GetState() { return this->State; }
+
+	void SetAction(int st) { this->Action = st; }
+	int GetAction() { return this->Action; }
 
 	void SetReleasedState(int st) { this->ReleasedKeyState = st; }
 	int GetReleasedState() { int temp = ReleasedKeyState; ReleasedKeyState = -1; return temp; }

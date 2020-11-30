@@ -158,8 +158,34 @@ void OpeningScene::LoadContent()
 	ani->Add(95036);
 	IntroParts.push_back(ani);
 
-	ani = new CAnimation(50);
+	ani = new CAnimation(100);
 	/*for(UINT i=95000;i<95037;i++)	ani->Add(i);*/
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
+	ani->Add(95041);
+	ani->Add(95042);
 	ani->Add(95041);
 	ani->Add(95042);
 	ani->Add(95041);
