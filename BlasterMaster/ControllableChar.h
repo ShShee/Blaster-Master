@@ -6,6 +6,7 @@ class Bullet :public MovingObject
 {
 protected:
 	bool FlipX = true;
+	bool FlagExplode = false;
 	float limitationX;
 	float limitationY;
 	int type;

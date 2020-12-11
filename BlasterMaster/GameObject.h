@@ -149,6 +149,7 @@ public:
 	int GetIdItemDroppped() { return this->IdItemDropped; }
 	void SetId(int ID) { this->id = ID; }
 	int GetId() { return this ->id; }
+	int GetUntouchtable() { return this->untouchable; }
 	void SetRenderColor(int rclr) { this->RenderColor = rclr; }
 	~GameObject() {}
 };
